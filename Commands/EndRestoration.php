@@ -9,7 +9,7 @@
  * @author  Ozan UYKUN [ozan@znframework.com]
  */
 
-use ZN\Requirements\System\Restoration;
+use ZN\Restoration;
 
 class EndRestoration
 {

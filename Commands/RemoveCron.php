@@ -22,6 +22,6 @@ class RemoveCron
      */
     public function __construct($parameters)
     {   
-        echo Crontab::remove($parameters ?? NULL);
+        new Result(Crontab::remove($parameters ?? NULL));
     }
 }
