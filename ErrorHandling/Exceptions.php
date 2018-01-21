@@ -12,6 +12,7 @@
 use ZN\Lang;
 use ZN\Config;
 use ZN\Helper;
+use ZN\Datatype;
 use ZN\Inclusion;
 
 class Exceptions extends \Exception implements ExceptionsInterface
