@@ -78,12 +78,13 @@ class Config
         if( empty(self::$config[$file]) )
         {
             $path = Base::suffix($file, '.php');
-        
-            self::$config[$file] = array_merge
+            $conf = is_array($con = Base::import(CONFIG_DIR . $path)) ? $con : [];
+
+            self::$config[$file] = PROJECT_TYPE === 'EIP' ? array_merge
             (
-                Base::import(SETTINGS_DIR . $path) ?: [],
-                Base::import(CONFIG_DIR   . $path) ?: []   
-            );
+                is_array($set = Base::import(SETTINGS_DIR . $path)) ? $set : [], 
+                $conf  
+            ) : $conf;
         }
     }
 

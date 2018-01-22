@@ -205,7 +205,7 @@ class Exceptions extends \Exception implements ExceptionsInterface
             }
         }
         
-        if( stristr($exceptionData['file'] ?? $file, 'Buffer/Callback.php') )
+        if( stristr($exceptionData['file'] ?? $file, '/Buffering.php') )
         {
             $templateWizardData    = self::_templateWizard();
             $exceptionData['file'] = $templateWizardData->file;
@@ -461,12 +461,12 @@ class Exceptions extends \Exception implements ExceptionsInterface
             $line;
         }
 
-        echo str_replace(['<div style="">&#60;&#63;php<br />', '{!!!!}'], [NULL, $errorBlock], Helper::highlight($newdata, 
+        echo preg_replace('/(<br\s\/>)/', EOL, str_replace(['<div style="">&#60;&#63;php<br />', '{!!!!}'], [NULL, $errorBlock], Helper::highlight($newdata, 
         [
             'default:color' => '#ccc',
             'keyword:color' => '#00BFFF',
             'string:color'  => '#fff'
-        ]));
+        ])));
         ?></pre></div><?php
     }
 }
