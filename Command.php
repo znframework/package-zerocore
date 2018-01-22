@@ -20,7 +20,8 @@ class Command extends Base
      */
     public function __construct()
     {
-        if( $_SERVER['DOCUMENT_ROOT'] ?? NULL )
+        # If the operation is executed via console, the code flow is not continue.  
+        if( ! defined('CONSOLE_ENABLED') )
         {
             throw new Exception
             (

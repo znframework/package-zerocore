@@ -11,7 +11,7 @@
 
 use ZN\Ability\Singleton;
 
- class Lang
+class Lang
 {
     use Singleton;
 
@@ -89,7 +89,7 @@ use ZN\Ability\Singleton;
     public static function select(String $file = NULL, String $str = NULL, $changed = NULL)
     {
         if( ! isset(self::$lang[$file]) )
-        {   
+        {      
             $file          = ($getLang = self::get()).'/'.Base::suffix($file, '.php');
             $langDir       = LANGUAGES_DIR . $file;
             $commonLangDir = EXTERNAL_LANGUAGES_DIR . $file;
@@ -102,7 +102,7 @@ use ZN\Ability\Singleton;
             {
                 self::$lang[$file] = require $commonLangDir;
             }
-            elseif( ! empty(self::$default) )
+            elseif( ! empty(self::$default) && empty(self::$lang[$file]) )
             {
                 self::$lang[$file] = self::$default[$getLang] ?? false;
 

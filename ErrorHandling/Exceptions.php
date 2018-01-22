@@ -458,7 +458,7 @@ class Exceptions extends \Exception implements ExceptionsInterface
             
             $newdata .= $index.'.' . $problem .
             str_repeat(' ', strlen($intcount) - strlen($i + 1)) . 
-            (str_replace(self::cleanEOL($file) ? EOL : NULL, NULL, $line) ?? NULL);
+            $line;
         }
 
         echo str_replace(['<div style="">&#60;&#63;php<br />', '{!!!!}'], [NULL, $errorBlock], Helper::highlight($newdata, 
@@ -468,18 +468,5 @@ class Exceptions extends \Exception implements ExceptionsInterface
             'string:color'  => '#fff'
         ]));
         ?></pre></div><?php
-    }
-
-    /**
-     * Clean EOL
-     * 
-     * @param string $file
-     * 
-     * @return bool
-     */
-    protected static function cleanEOL(String $file) : Bool
-    {
-        return ! strstr($file, PROJECTS_DIR) && 
-               ! strstr($file, 'Functions.php');
     }
 }
