@@ -188,7 +188,7 @@ class Classes
 
         $lowerName           = strtolower($name);
         $lowerInternalAccess = strtolower(INTERNAL_ACCESS);
-        $flipClassMap        = array_flip($classMap['namespaces']);
+        $flipClassMap        = array_flip($classMap['namespaces'] ?? []);
         $lowerClass          = $lowerInternalAccess.$lowerName;
 
         if( ! empty($flipClassMap[$lowerName]) )
