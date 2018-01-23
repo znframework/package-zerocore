@@ -73,7 +73,7 @@ class In
      */
     public static function invalidRequest(String $type, Bool $bool)
     {
-        $invalidRequest = Config::get('Services', 'route')['requestMethods'];
+        $invalidRequest = Config::get('Routing', 'requestMethods');
 
         if( $requestMethods = $invalidRequest[$type] )
         {
@@ -215,9 +215,9 @@ class In
     {
         self::routeAll();
 
-        $config = Config::get('Services', 'route');
+        $config = Config::get('Routing');
 
-        if( $config['openController'] )
+        if( ! empty($config['openController']) )
         {
             $internalDir = NULL;
 

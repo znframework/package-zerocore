@@ -46,7 +46,7 @@ class Route extends FilterProperties implements RouteInterface
      */
     public function __construct()
     {
-        $this->getConfig = Config::get('Services', 'route');
+        $this->getConfig = Config::get('Routing');
     }
 
     /**
@@ -72,7 +72,7 @@ class Route extends FilterProperties implements RouteInterface
             $this->change('404');
         }
 
-        Config::set('Services', 'route', ['show404' => $this->route]);
+        Config::set('Routing', 'show404', $this->route);
 
         $this->uri($controllerAndMethod);
     }

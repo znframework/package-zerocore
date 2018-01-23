@@ -131,7 +131,7 @@ class Kernel
         In::invalidRequest('allowMethods', false);
 
         # Configures the startup controller setting.
-        In::startingConfig('controller');
+        In::startingConfig('constructors');
     }
 
     /**
@@ -168,7 +168,7 @@ class Kernel
             {
                 Helper::report('InvalidRequest', "Invalid request made to {$page}/{$function} page!");
 
-                Response::redirect(Config::get('Services', 'route')['show404']);
+                Response::redirect(Config::get('Routing', 'show404'));
             }
         }
         
@@ -273,7 +273,7 @@ class Kernel
      */
     public static function end()
     {
-        In::startingConfig('destruct');
+        In::startingConfig('destructors');
 
         # In this layer, all the processes, including the kernel end codes, are executed.
         # Code to try immediately after the core is placed on this layer.
