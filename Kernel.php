@@ -201,7 +201,7 @@ class Kernel
      */
     public static function viewPathFinder($function, &$viewPath, &$wizardPath)
     {
-        $viewNameType = Config::get('ViewObjects', 'viewNameType') ?: 'file';
+        $viewNameType = Config::get('Starting', 'viewNameType') ?: 'file';
 
         if( $viewNameType === 'file' )
         {
@@ -229,7 +229,7 @@ class Kernel
     public static function viewAutoload($wizardPath, $viewPath)
     {
         # 5.3.62[added]|5.3.77[edited]
-        if( Config::get('ViewObjects', 'ajaxCodeContinue') === false && Request::isAjax() )
+        if( Config::get('Starting', 'ajaxCodeContinue') === false && Request::isAjax() )
         {
             return;
         }
