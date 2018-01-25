@@ -97,7 +97,7 @@ class Config
      */
     public static function default($class)
     {
-        self::$default = get_object_vars($class);
+        self::$default = $class;
     
         return self::singleton();
     }
@@ -133,20 +133,16 @@ class Config
                     self::$config[$file][$k] = self::$setConfigs[$file][$k];
                 }
             }
-        }
+        }  
 
         if( empty($configs) )
         {
-            $return = self::$config[$file] ?? self::$default;
+            return self::$config[$file] ?: self::getDefault();
         }
         else
         {
-            $return = self::$config[$file][$configs] ?? self::$default;
+            return self::$config[$file][$configs] ?? self::getDefault();
         }
-    
-        self::$default = false;
-
-        return $return;
     }
 
     /**
@@ -275,6 +271,31 @@ class Config
     public static function iniRestore(String $str)
     {
         ini_restore($str);
+    }
+
+    /**
+     * Protected Get Default
+     * 
+     * @return mixed
+     */
+    protected static function getDefault()
+    {
+        $default = self::$default;
+
+        self::$default = NULL;
+
+        if( is_string($default) )
+        {
+            return get_class_vars($default);
+        }
+        elseif( is_object($default) )
+        {
+            return get_object_vars($default);
+        }
+        else
+        {
+            return false;
+        }
     }
 }
 

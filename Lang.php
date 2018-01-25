@@ -53,7 +53,7 @@ class Lang
      */
     public static function default($class)
     {
-        self::$default = get_object_vars($class);
+        self::$default = $class;
     
         return self::singleton();
     }
@@ -104,9 +104,7 @@ class Lang
             }
             elseif( ! empty(self::$default) && empty(self::$lang[$file]) )
             {
-                self::$lang[$file] = self::$default[$getLang] ?? false;
-
-                self::$default = NULL;
+                self::$lang[$file] = self::getDefault()[$getLang] ?? false;
             }
         }
 
@@ -208,6 +206,31 @@ class Lang
         else
         {
             return $_SESSION[$systemLanguageData];
+        }
+    }
+
+    /**
+     * Protected Get Default
+     * 
+     * @return mixed
+     */
+    protected static function getDefault()
+    {
+        $default = self::$default;
+
+        self::$default = NULL;
+
+        if( is_string($default) )
+        {
+            return get_class_vars($default);
+        }
+        elseif( is_object($default) )
+        {
+            return get_object_vars($default);
+        }
+        else
+        {
+            return false;
         }
     }
 }
