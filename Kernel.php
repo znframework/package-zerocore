@@ -26,36 +26,19 @@ class Kernel
     public static function start()
     {  
         # If the use of alias is obvious, it will activate this operation.
-        if( $autoloaderAliases = Config::get('Autoloader')['aliases'] ?? NULL ) foreach( $autoloaderAliases as $alias => $origin )
-        {
-            if( class_exists($origin) )
-            {
-                class_alias($origin, $alias);
-            }
-        }
+        Autoloader::aliases();
         
-        $appcon = Config::get('Project');
-
-        if( empty($appcon) && PROJECT_TYPE === 'EIP' ) 
-        {
-            Base::trace('["Container"] Not Found! Check the [\'containers\'] setting in the [Settings/Projects.php] file.');
-        }
-
-        define('PROJECT_MODE', strtolower($appcon['mode'] ?? 'development'));
+        # It keeps the selected project configuration.
+        define('PROJECT_CONFIG', Config::get('Project'));
        
         # Activates the project mode.
-        In::projectMode(PROJECT_MODE, $appcon['errorReporting'] ?? 1);
-
-        if( PROJECT_MODE !== 'publication' ) 
-        {
-            Exceptions::handler(); Errors::handler();
-        }
+        In::projectMode();
 
         # Enables the ob_gzhandler method if it is turned on.
-        $htaccess = Config::get('Htaccess');
+        define('HTACCESS_CONFIG', Config::get('Htaccess'));
 
         # OB process is starting.
-        if( ($htaccess['cache']['obGzhandler'] ?? true) === true && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'] ?? NULL, 'gzip') )
+        if( (HTACCESS_CONFIG['cache']['obGzhandler'] ?? true) === true && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'] ?? NULL, 'gzip') )
         {
             ob_start('ob_gzhandler');
         }
@@ -68,10 +51,14 @@ class Kernel
         session_start();
         
         # Sends defined header information.
-        Base::headers(Config::get('Project', 'headers'));
+        Base::headers(PROJECT_CONFIG['headers']);
 
-        if( IS::timeZone($timezone = Config::get('DateTime', 'timezone')) ) date_default_timezone_set($timezone);
-        
+        # Sets the timezone.
+        if( IS::timeZone($timezone = PROJECT_CONFIG['timezone']) ) 
+        {
+            date_default_timezone_set($timezone);
+        }
+
         # The codes to be written to this layer will run just before the kernel comes into play. 
         # However, htaccess is enabled after Autoloder and Header configurations.
         Base::layer('MiddleTop');
@@ -85,10 +72,10 @@ class Kernel
         # The software apache and htaccess allow 
         # the .htaccess file to be rearranged according to the changes 
         # if the file is open for writing.
-        if( ($htaccess['createFile'] ?? NULL) === true )
+        if( IS::software() === 'apache' )
         {
-            Htaccess::create($htaccess);
-        }      
+            Htaccess::create();
+        }    
         
         # Enables processing of changes to the robots.txt file if it is open.
         if( Config::robots('createFile') === true )
@@ -279,7 +266,7 @@ class Kernel
         # Code to try immediately after the core is placed on this layer.
         Base::layer('BottomTop');
 
-        if( Config::get('Project', 'log')['createFile'] === true && $errorLast = Errors::last() )
+        if( PROJECT_CONFIG['log']['createFile'] === true && $errorLast = Errors::last() )
         {
             $lang    = Lang::select('Templates');
             $message = $lang['line']   .':'.$errorLast['line'].', '.

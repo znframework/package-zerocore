@@ -10,6 +10,7 @@
  */
 
 use ZN\ErrorHandling\Errors;
+use ZN\ErrorHandling\Exceptions;
 use ZN\Inclusion\Project\View;
 use ZN\Inclusion\Project\Masterpage;
 
@@ -32,20 +33,21 @@ class In
     /**
      * Changes project mode
      * 
-     * @param string $mode - [publication|development|restoration]
-     * @param int    $report = 1
-     * 
      * @return void
      */
-    public static function projectMode(String $mode, Int $report = -1)
+    public static function projectMode()
     {
-        switch( strtolower($mode) )
+        # It keeps the selected project mode.
+        define('PROJECT_MODE', strtolower(PROJECT_CONFIG['mode'] ?? 'development'));
+        
+        # Controls project mode.
+        switch( strtolower(PROJECT_MODE) )
         {
             # Publication Release Mode
             # All faults are off.
             # It is recommended to use this mode after the completion of the project.
             case 'publication' :
-                error_reporting(0);
+                Errors::report(0);
             break;
             
             # Restoration Repair Mode
@@ -55,7 +57,7 @@ class In
             # Development Development Mode
             # All faults are open.
             case 'development' :
-                error_reporting($report);
+                Exceptions::handler(); Errors::handler(PROJECT_CONFIG['errorReporting'] ?? 1);
             break;
             
             # Default output
