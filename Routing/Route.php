@@ -171,7 +171,7 @@ class Route extends FilterProperties implements RouteInterface
         {
             $config = $this->getConfig;
 
-            Config::set('Services', 'route',
+            Config::set('Routing',
             [
                 'changeUri' => array_merge($this->routes['changeUri'], $config['changeUri'])
             ]);

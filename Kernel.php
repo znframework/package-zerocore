@@ -98,13 +98,13 @@ class Kernel
         # Configures the use of Composer autoloader.
         if( $composer = Config::get('Autoloader', 'composer') ) 
         {
-            self::_composer($composer);
+            self::composerLoader($composer);
         }
         
         # If the setting is active, it loads the startup files.
         if( ($starting = Config::get('Starting'))['autoload']['status'] === true ) 
         {
-            self::_starting($starting);
+            self::startingFileLoader($starting);
         }
         
         # If the project mode restoration is set, restoration is started.
@@ -193,12 +193,12 @@ class Kernel
         if( $viewNameType === 'file' )
         {
             $viewFunction = $function === CURRENT_COPEN_PAGE ? NULL : '-' . $function;
-            $viewDir      = self::_view($viewFunction);
+            $viewDir      = self::viewPathCreator($viewFunction);
         }
         else
         {
             $viewFunction = $function === CURRENT_COPEN_PAGE ? CURRENT_COPEN_PAGE : $function;
-            $viewDir      = self::_view('/' . $viewFunction);
+            $viewDir      = self::viewPathCreator('/' . $viewFunction);
         }
 
         $viewPath   = $viewDir . '.php';
@@ -215,21 +215,34 @@ class Kernel
      */
     public static function viewAutoload($wizardPath, $viewPath)
     {
-        # 5.3.62[added]|5.3.77[edited]
+        # 5.3.62[added]|5.3.77|5.6.0[edited]
         if( Config::get('Starting', 'ajaxCodeContinue') === false && Request::isAjax() )
         {
             return;
         }
         
-        if( is_file($wizardPath) && ! IS::import($viewPath) && ! IS::import($wizardPath) )
+        # It is checked whether the file to be automatically loaded has been included before.
+        if( ! IS::import($viewPath) && ! IS::import($wizardPath) )
         {
-            $usableView = self::_load($wizardPath);
-        }
-        elseif( is_file($viewPath) && ! IS::import($viewPath) && ! IS::import($wizardPath) )
-        {
-            $usableView = self::_load($viewPath);
+            # First, it is tried to load the file with the wizard extension.
+            if( is_file($wizardPath) )
+            {
+                $usableView = self::viewLoader($wizardPath);
+            }
+            # If the file can not be loaded, the attempt is made to load the file with the standard extension.
+            elseif( is_file($viewPath) )
+            {
+                $usableView = self::viewLoader($viewPath);
+            }
+            # Loading can not be performed because the appropriate view page is not found.
+            else
+            {
+                $usableView = '';
+            }
         }
 
+        # It is checked whether data is sent to the masterpage. 
+        # If data transmission is done, the masterpage is activated.
         if( ! empty($masterpageData = In::$masterpage) )
         {
             $inData = array_merge(...$masterpageData);
@@ -239,12 +252,15 @@ class Kernel
             $inData = [];
         }
 
+        # Merge sent data.
         $data = array_merge($inData, Masterpage::$data);
         
+        # if sent data via Masterpage. Enables MasterPage.
         if( ($data['masterpage'] ?? NULL) === true || ! empty($data) )
         {
-            (new Inclusion\Masterpage)->headData($data)->bodyContent($usableView ?? '')->use($data);
+            (new Inclusion\Masterpage)->headData($data)->bodyContent($usableView)->use($data);
         }
+        # Otherwise, it prints without using the masterpage.
         elseif( ! empty($usableView) )
         {
             echo $usableView;
@@ -285,22 +301,26 @@ class Kernel
     }
 
     /**
-     * protected starting
+     * Protected Starting File Loader
      * 
      * @param array $starting
      * 
      * @return void
      */
-    protected static function _starting($starting)
+    protected static function startingFileLoader($starting)
     {   
+        # It is specified whether the subfile scanning can be done or not.
         $autoloadRecursive = $starting['autoload']['recursive'];
 
+        # The files to be automatically loaded are merged at startup.
+        # External & Project Files
         $startingAutoload  = array_merge
         (
             Filesystem::getRecursiveFiles(AUTOLOAD_DIR         , $autoloadRecursive), 
             Filesystem::getRecursiveFiles(EXTERNAL_AUTOLOAD_DIR, $autoloadRecursive)
         );
 
+        # The file upload process is starting.
         if( ! empty($startingAutoload) ) foreach( $startingAutoload as $file )
         {
             if( Filesystem::getExtension($file) === 'php' )
@@ -314,13 +334,13 @@ class Kernel
     }
 
     /**
-     * protected composer
+     * Protected Composer Loader
      * 
      * @param mixed $composer
      * 
      * @return void
      */
-    protected static function _composer($composer)
+    protected static function composerLoader($composer)
     {
         $path = 'vendor/autoload.php';
 
@@ -350,13 +370,13 @@ class Kernel
     }
 
     /**
-     * protected view
+     * Protected View Path Creator
      * 
      * @param string $fix
      * 
      * @return string
      */
-    protected static function _view($fix)
+    protected static function viewPathCreator($fix)
     {
         $view = CURRENT_CONTROLLER;
 
@@ -379,13 +399,13 @@ class Kernel
     }
 
     /**
-     * protected load view
+     * Protected View Loader
      * 
      * @param string $path
      * 
      * @return mixed
      */
-    protected static function _load($path)
+    protected static function viewLoader($path)
     {
         return Inclusion\View::use(str_replace(PAGES_DIR, NULL, $path), NULL, true);
     }
