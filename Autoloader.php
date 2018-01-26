@@ -349,6 +349,20 @@ class Autoloader
     }
 
     /**
+     * If the use of alias is obvious, it will activate this operation.
+     */
+    public static function aliases()
+    {
+        if( $autoloaderAliases = Config::get('Autoloader')['aliases'] ?? NULL ) foreach( $autoloaderAliases as $alias => $origin )
+        {
+            if( class_exists($origin) )
+            {
+                class_alias($origin, $alias);
+            }
+        }
+    }
+
+    /**
      * Search the invoked class in the classmap.
      * 
      * @param string $directory

@@ -23,7 +23,7 @@ function CSRFInput()
 {
     ZN\Security::createCSRFTokenKey();
 
-    return Form::hidden('token', ZN\Security::getCSRFTokenKey());
+    return ZN\Singleton::class('ZN\Hypertext\Form')->hidden('token', ZN\Security::getCSRFTokenKey());
 }
 
 /**
@@ -56,5 +56,5 @@ function output($data, Array $settings = NULL, Bool $content = false)
  */
 function redirect(String $url = NULL, Int $time = 0, Array $data = NULL, Bool $exit = true)
 {
-    new Redirect($url, $time, $data, $exit);
+    ZN\Response::redirect($url, $time, $data, $exit);
 }

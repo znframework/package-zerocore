@@ -12,13 +12,6 @@
 class Htaccess
 {
     /**
-     * Keep htaccess config
-     * 
-     * @var array
-     */
-    protected static $config;
-
-    /**
      * Cache Settings
      * 
      * @param string &$htaccess
@@ -52,7 +45,7 @@ class Htaccess
      */
     protected static function modGzip(&$htaccess)
     {
-        $modGzip = self::$config['cache']['modGzip'];
+        $modGzip = HTACCESS_CONFIG['cache']['modGzip'];
         
         if( $modGzip['status'] === true )
         {
@@ -78,7 +71,7 @@ class Htaccess
      */
     protected static function modExpires(&$htaccess)
     {
-        $modExpires = self::$config['cache']['modExpires'];
+        $modExpires = HTACCESS_CONFIG['cache']['modExpires'];
 
         if( $modExpires['status'] === true )
         {
@@ -107,7 +100,7 @@ class Htaccess
      */
     protected static function modHeaders(&$htaccess)
     {
-        $modHeaders = self::$config['cache']['modHeaders'];
+        $modHeaders = HTACCESS_CONFIG['cache']['modHeaders'];
         
         if( $modHeaders['status'] === true )
         {
@@ -136,7 +129,7 @@ class Htaccess
      */
     protected static function headers(&$htaccess)
     {
-        $settings  = self::$config['headers'];
+        $settings  = HTACCESS_CONFIG['headers'];
         $htaccess .= "<ifModule mod_expires.c>".EOL;
 
         foreach( $settings as $val )
@@ -159,7 +152,7 @@ class Htaccess
      */
     protected static function settings(&$htaccess)
     {
-        $settings = self::$config['settings'];
+        $settings = HTACCESS_CONFIG['settings'];
 
         if( ! empty($settings) )
         {
@@ -237,7 +230,7 @@ class Htaccess
      */
     protected static function ini(&$htaccess)
     {
-        $status = self::$config['ini']['status'];
+        $status = HTACCESS_CONFIG['ini']['status'];
         
         if( $status === false )
         {
@@ -270,18 +263,14 @@ class Htaccess
     /**
      * Creates htaccess file.
      * 
-     * @param array $config = NULL
-     * 
      * @return void
      */
-    public static function create($config = NULL)
+    public static function create()
     {
-        if( IS::software() !== 'apache' )
+        if( empty(HTACCESS_CONFIG['createFile']) )
         {
             return false;
         }
-        
-        self::$config = $config ?? Config::get('Htaccess');
 
         $htaccess  = '#----------------------------------------------------------------------'.EOL;
         $htaccess .= '# This file automatically created and updated'.EOL;
