@@ -23,11 +23,6 @@ class ZN
     protected static $defines = [];
 
     /**
-     * @var string
-     */
-    protected static $notAvailable = 'This command not available with this edition!';
-
-    /**
      * Magic call static
      * 
      * @param string $class
@@ -38,55 +33,6 @@ class ZN
     public static function __callStatic($class, $parameters)
     {
         return Singleton::class($class, $parameters);
-    }
-
-    /**
-     * Upgrade system
-     * 
-     * @param void
-     * 
-     * @return bool
-     */
-    public static function upgrade()
-    {
-        if( PROJECT_TYPE !== 'EIP' )
-        {
-            return self::$notAvailable;
-        }
-
-        $return = self::upgradeListFiles();
-
-        if( ! empty($return) )
-        {
-            foreach( $return as $file => $content )
-            {
-                $dirname = Filesystem\Info::pathInfo($file, 'dirname');
-
-                Filesystem\Forge::createFolder($dirname);
-                file_put_contents($file, $content);
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Get upgrade files
-     * 
-     * @param void
-     * 
-     * @return array
-     */
-    public static function upgradeFiles()
-    {
-        if( PROJECT_TYPE !== 'EIP' )
-        {
-            return self::$notAvailable;
-        }
-        
-        return array_keys(self::upgradeListFiles());
     }
 
     /**
@@ -182,20 +128,6 @@ class ZN
         # Creates a table that calculates the operating performance of the system. 
         # To open this table, follow the steps below.
         In::benchmarkReport();
-    }
-
-    /**
-     * protected restful
-     * 
-     * @param void
-     * 
-     * @return array
-     */
-    protected static function upgradeListFiles()
-    {
-        $return = (new Restful)->post('https://api.znframework.com/statistics/upgrade', ['version' => ZN_VERSION]);
-
-        return Separator::decodeArray($return);
     }
 
     /**
