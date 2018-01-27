@@ -74,7 +74,7 @@ class Route extends FilterProperties implements RouteInterface
 
         Config::set('Routing', 'show404', $this->route);
 
-        $this->uri($controllerAndMethod);
+        $this->uri($controllerAndMethod, false);
     }
 
     /**
@@ -171,10 +171,7 @@ class Route extends FilterProperties implements RouteInterface
         {
             $config = $this->getConfig;
 
-            Config::set('Routing',
-            [
-                'changeUri' => array_merge($this->routes['changeUri'], $config['changeUri'])
-            ]);
+            Config::set('Routing', 'changeUri', array_merge($this->routes['changeUri'], $config['changeUri']));
 
             $this->defaultVariable();
         }
