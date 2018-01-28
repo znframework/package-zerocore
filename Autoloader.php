@@ -629,8 +629,8 @@ class Autoloader
                 define($key, $value);
             }
         }
-
-        if( empty(CONTROLLERS_DIR) )
+        
+        if( ! is_dir(CONTROLLERS_DIR) )
         {
             Base::trace
             (
