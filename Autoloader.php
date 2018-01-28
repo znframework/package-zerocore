@@ -171,9 +171,9 @@ class Autoloader
         if( ! is_file(self::$path) )
         {
             $classMapPage  = '<?php'.$eol;
-            $classMapPage .= '//----------------------------------------------------------------------'.$eol;
-            $classMapPage .= '// This file automatically created and updated'.$eol;
-            $classMapPage .= '//----------------------------------------------------------------------'.$eol;
+            $classMapPage .= '#----------------------------------------------------------------------'.$eol;
+            $classMapPage .= '# This file automatically created and updated'.$eol;
+            $classMapPage .= '#----------------------------------------------------------------------'.$eol;
         }
         else
         {
@@ -206,7 +206,7 @@ class Autoloader
             }
         }
 
-        self::isWritable(self::$path);
+        Kernel::isWritable(self::$path);
 
         file_put_contents(self::$path, $classMapPage, FILE_APPEND);
     }
@@ -505,9 +505,9 @@ class Autoloader
     protected static function _classFileContent($newClassName, $constants)
     {
         $classContent  = '<?php'.EOL;
-        $classContent .= '//-------------------------------------------------------------------------'.EOL;
-        $classContent .= '// This file automatically created and updated'.EOL;
-        $classContent .= '//-------------------------------------------------------------------------'.EOL.EOL;
+        $classContent .= '#-------------------------------------------------------------------------'.EOL;
+        $classContent .= '# This file automatically created and updated'.EOL;
+        $classContent .= '#-------------------------------------------------------------------------'.EOL.EOL;
         $classContent .= 'class '.$newClassName.' extends StaticAccess'.EOL;
         $classContent .= '{'.EOL;
         $classContent .= $constants;
@@ -516,7 +516,7 @@ class Autoloader
         $classContent .= HT.HT.'return __CLASS__;'.EOL;
         $classContent .= HT.'}'.EOL;
         $classContent .= '}'.EOL.EOL;
-        $classContent .= '//-------------------------------------------------------------------------';
+        $classContent .= '#-------------------------------------------------------------------------';
 
         return $classContent;
     }
@@ -581,208 +581,6 @@ class Autoloader
     protected static function _cleanNail($string)
     {
         return str_replace(["'", '"'], NULL, $string);
-    }
-
-    /**
-     * Defines required constants
-     * 
-     * @param string $version
-     * 
-     * @return void
-     */
-    public static function defines()
-    {
-        define('PROJECTS_CONFIG', Base::import(SETTINGS_DIR . 'Projects.php'));
-        define('DEFAULT_PROJECT', PROJECTS_CONFIG['directory']['default']);
-        
-        self::defineCurrentProject();
-        
-        define('CONTROLLERS_DIR' , PROJECT_DIR . GET_DIRS['CONTROLLERS_DIR']);
-        define('VIEWS_DIR'       , PROJECT_DIR . GET_DIRS['VIEWS_DIR']);
-        define('PAGES_DIR'       , VIEWS_DIR); 
-        define('CONTAINER_DIRS', 
-        [
-            'ROUTES_DIR'    => GET_DIRS['ROUTES_DIR']   , 'DATABASES_DIR' => GET_DIRS['DATABASES_DIR'],
-            'CONFIG_DIR'    => GET_DIRS['CONFIG_DIR']   , 'STORAGE_DIR'   => GET_DIRS['STORAGE_DIR']  ,
-            'COMMANDS_DIR'  => GET_DIRS['COMMANDS_DIR'] , 'LANGUAGES_DIR' => GET_DIRS['LANGUAGES_DIR'],
-            'LIBRARIES_DIR' => GET_DIRS['LIBRARIES_DIR'], 'MODELS_DIR'    => GET_DIRS['MODELS_DIR']   ,
-            'STARTING_DIR'  => GET_DIRS['STARTING_DIR'] , 'AUTOLOAD_DIR'  => GET_DIRS['AUTOLOAD_DIR'] ,
-                                                          'HANDLOAD_DIR'  => GET_DIRS['HANDLOAD_DIR'] ,
-                                                          'LAYERS_DIR'    => GET_DIRS['LAYERS_DIR']   ,
-            'RESOURCES_DIR' => GET_DIRS['RESOURCES_DIR'], 'FILES_DIR'     => GET_DIRS['FILES_DIR']    ,
-                                                          'TEMPLATES_DIR' => GET_DIRS['TEMPLATES_DIR'],
-                                                          'THEMES_DIR'    => GET_DIRS['THEMES_DIR']   ,
-                                                          'PLUGINS_DIR'   => GET_DIRS['PLUGINS_DIR']  ,
-                                                          'UPLOADS_DIR'   => GET_DIRS['UPLOADS_DIR']  ,
-        ]);
-
-        foreach( CONTAINER_DIRS as $key => $value )
-        {
-            define('EXTERNAL_' . $key, EXTERNAL_DIR . $value);
-
-            if( PROJECT_TYPE === 'EIP' ) # For EIP edition
-            {
-                define($key, self::getProjectContainerDir($value));
-            }
-            else # For SE edition
-            {
-                define($key, $value);
-            }
-        }
-        
-        if( ! is_dir(CONTROLLERS_DIR) )
-        {
-            Base::trace
-            (
-                'The [controller directory] for the custom edition must be defined. 
-                To do this, specify the corresponding controller directory in the [index.php] file.'
-            );
-        }
-    }
-
-    /**
-     * Get project container directory
-     * 
-     * Returns the project directory name according to the project in the system.
-     * Only for multi edition.
-     * 
-     * @param string $path = NULL
-     * 
-     * @return string
-     */
-    protected static function getProjectContainerDir($path = NULL) : String
-    {
-        $containers          = PROJECTS_CONFIG['containers'];
-        $containerProjectDir = PROJECT_DIR . $path;
-
-        if( ! empty($containers) && defined('_CURRENT_PROJECT') )
-        {
-            $restoreFix = 'Restore';
-
-            # 5.3.8[added]
-            if( strpos(_CURRENT_PROJECT, $restoreFix) === 0 && is_dir(PROJECTS_DIR . ($restoredir = ltrim(_CURRENT_PROJECT, $restoreFix))) )
-            {
-                $condir = $restoredir;
-
-                if( $containers[$condir] ?? NULL )
-                {
-                    $condir = $containers[$condir];
-                }
-            }
-            else
-            {
-                $condir = $containers[_CURRENT_PROJECT] ?? NULL;
-            }  
-            
-            return ! empty($condir) && ! file_exists($containerProjectDir)
-                    ? PROJECTS_DIR . Base::suffix($condir) . $path
-                    : $containerProjectDir;
-        }
-
-        # 5.3.33[edited]
-        if( is_dir($containerProjectDir) )
-        {
-            return $containerProjectDir;
-        }
-
-        # 5.1.5[added]
-        # The enclosures can be the opening controller
-        if( $container = ($containers[CURRENT_PROJECT] ?? NULL) )
-        {
-            $containerProjectDir = str_replace(CURRENT_PROJECT, $container, $containerProjectDir);
-        }
-
-        return $containerProjectDir;
-    }
-
-    /**
-     * Define current project
-     * 
-     * It arranges some values according to the project which is valid in the system.
-     * 
-     * @param void
-     * 
-     * @return mixed
-     */
-    protected static function defineCurrentProject()
-    {
-        self::isWritable('.htaccess');
-
-        if( PROJECT_TYPE !== 'EIP' )
-        {
-            define('CURRENT_PROJECT', NULL);
-            define('PROJECT_DIR'    , NULL);
-
-            return false;
-        }
-
-        $projectConfig = PROJECTS_CONFIG['directory']['others'];
-        $projectDir    = $projectConfig;
-
-        if( defined('CONSOLE_PROJECT_NAME') )
-        {
-            $internalDir = CONSOLE_PROJECT_NAME;
-        }
-        else
-        {
-            $currentPath = $_SERVER['PATH_INFO'] ?? $_SERVER['QUERY_STRING'] ?? false;
-
-            # 5.0.3[edited]
-            # QUERY_STRING & REQUEST URI Empty Control
-            if( empty($currentPath) && ($requestUri = ($_SERVER['REQUEST_URI'] ?? false)) !== '/' )
-            {
-                $currentPath = $requestUri;
-            }
-            
-            $internalDir = ( ! empty($currentPath) ? explode('/', ltrim($currentPath, BASE_DIR ?: '/'))[0] : '' );
-        }
-
-        if( is_array($projectDir) )
-        {
-            $internalDir = $projectDir[$internalDir] ?? $internalDir;
-            $projectDir  = $projectDir[Base::host()] ?? DEFAULT_PROJECT;
-        }
-
-        if( ! empty($internalDir) && is_dir(PROJECTS_DIR . $internalDir) )
-        {
-            define('_CURRENT_PROJECT', $internalDir);
-
-            $flip              = array_flip($projectConfig);
-            $projectDir        = _CURRENT_PROJECT;
-            $currentProjectDir = $flip[$projectDir] ?? $projectDir;
-        }
-
-        define('CURRENT_PROJECT', $currentProjectDir ?? $projectDir);
-        define('PROJECT_DIR', Base::suffix(PROJECTS_DIR . $projectDir));
-
-        if( ! is_dir(PROJECT_DIR) )
-        {
-            Base::trace('["'.$projectDir.'"] Project Directory Not Found!');
-        }
-    }
-
-    /**
-    * Is writable
-    * 
-    * Controls whether file permission is required in the operating system where the system is installed.
-    * 
-    * @param string $path
-    * 
-    * @return void
-    */
-    protected static function isWritable(String $path)
-    {
-        if( is_file($path) && ! is_writable($path) && IS::software() === 'apache' )
-        {   
-            Base::trace
-            (
-                'Please check the [file permissions]. Click the 
-                    <a target="_blank" style="text-decoration:none" href="https://docs.znframework.com/getting-started/installation-instructions#sh42">
-                        [documentation]
-                    </a> 
-                to see how to configure file permissions.'
-            );
-        }
     }
 
     /**
