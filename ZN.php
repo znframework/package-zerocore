@@ -53,12 +53,12 @@ class ZN
      * Run ZN
      * 
      * @param string $type     = 'EIP' - options[EIP|SE]
-     * @param string $version  = '5.6.0'
-     * @param string $dedicate = 'Nikola Tesla'
+     * @param string $version  = NULL
+     * @param string $dedicate = NULL
      * 
      * @return void|false
      */
-    public static function run(String $type = 'EIP', String $version = '5.6.0', String $dedicate = 'Nikola Tesla')
+    public static function run(String $type = 'EIP', String $version = NULL, String $dedicate = NULL)
     {
         # PHP shows code errors.
         ini_set('display_errors', true);
