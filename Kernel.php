@@ -36,7 +36,7 @@ class Kernel
 
         # Enables the ob_gzhandler method if it is turned on.
         define('HTACCESS_CONFIG', Config::get('Htaccess'));
-
+        
         # OB process is starting.
         if( (HTACCESS_CONFIG['cache']['obGzhandler'] ?? true) === true && substr_count($_SERVER['HTTP_ACCEPT_ENCODING'] ?? NULL, 'gzip') )
         {
@@ -49,12 +49,12 @@ class Kernel
 
         # Session process is starting.
         session_start();
-        
+       
         # Sends defined header information.
-        Base::headers(PROJECT_CONFIG['headers']);
+        Base::headers(PROJECT_CONFIG['headers'] ?? []);
 
         # Sets the timezone.
-        if( IS::timeZone($timezone = PROJECT_CONFIG['timezone']) ) 
+        if( IS::timeZone($timezone = (PROJECT_CONFIG['timezone'] ?? '')) ) 
         {
             date_default_timezone_set($timezone);
         }

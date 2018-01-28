@@ -107,7 +107,11 @@ class Exceptions extends \Exception implements ExceptionsInterface
 
         $projectError = Config::get('Project');
 
-        if( in_array($no, $projectError['exitErrors'], true) || in_array(self::$errorCodes[$no] ?? NULL, $projectError['exitErrors'], true) )
+        if
+        ( 
+            in_array($no, $projectError['exitErrors'] ?? [], true) || 
+            in_array(self::$errorCodes[$no] ?? NULL, $projectError['exitErrors'] ?? [], true) 
+        )
         {
             exit($table);
         }

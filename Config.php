@@ -137,11 +137,11 @@ class Config
 
         if( empty($configs) )
         {
-            return self::$config[$file] ?: self::getDefault();
+            return (self::$config[$file] ?? NULL) ?: self::getDefault();
         }
         else
         {
-            return self::$config[$file][$configs] ?? self::getDefault();
+            return (self::$config[$file][$configs] ?? NULL) ?: self::getDefault();
         }
     }
 
