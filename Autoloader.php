@@ -763,7 +763,7 @@ class Autoloader
     */
     protected static function isWritable(String $path)
     {
-        if( is_file($path) && ! is_writable($path) && IS::software() === 'apache' && PROJECT_TYPE !== 'CE')
+        if( is_file($path) && ! is_writable($path) && IS::software() === 'apache' )
         {   
             Base::trace
             (
