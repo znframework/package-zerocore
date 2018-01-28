@@ -629,6 +629,15 @@ class Autoloader
                 define($key, $value);
             }
         }
+
+        if( empty(CONTROLLERS_DIR) )
+        {
+            Base::trace
+            (
+                'The [controller directory] for the custom edition must be defined. 
+                To do this, specify the corresponding controller directory in the [index.php] file.'
+            );
+        }
     }
 
     /**
