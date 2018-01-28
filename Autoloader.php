@@ -606,18 +606,14 @@ class Autoloader
             'CONFIG_DIR'    => GET_DIRS['CONFIG_DIR']   , 'STORAGE_DIR'   => GET_DIRS['STORAGE_DIR']  ,
             'COMMANDS_DIR'  => GET_DIRS['COMMANDS_DIR'] , 'LANGUAGES_DIR' => GET_DIRS['LANGUAGES_DIR'],
             'LIBRARIES_DIR' => GET_DIRS['LIBRARIES_DIR'], 'MODELS_DIR'    => GET_DIRS['MODELS_DIR']   ,
-            'STARTING_DIR'  => GET_DIRS['STARTING_DIR'] , 'AUTOLOAD_DIR'  => 'Starting/Autoload/'     ,
-                                                          'HANDLOAD_DIR'  => 'Starting/Handload/'     ,
-                                                          'LAYERS_DIR'    => 'Starting/Layers/'       ,
-            'RESOURCES_DIR' => GET_DIRS['RESOURCES_DIR'], 'PROCESSOR_DIR' => 'Resources/Processor/'   ,
-                                                          'FILES_DIR'     => 'Resources/Files/'       ,
-                                                          'FONTS_DIR'     => 'Resources/Fonts/'       ,
-                                                          'SCRIPTS_DIR'   => 'Resources/Scripts/'     ,
-                                                          'STYLES_DIR'    => 'Resources/Styles/'      ,
-                                                          'TEMPLATES_DIR' => 'Resources/Templates/'   ,
-                                                          'THEMES_DIR'    => 'Resources/Themes/'      ,
-                                                          'PLUGINS_DIR'   => 'Resources/Plugins/'     ,
-                                                          'UPLOADS_DIR'   => 'Resources/Uploads/'
+            'STARTING_DIR'  => GET_DIRS['STARTING_DIR'] , 'AUTOLOAD_DIR'  => GET_DIRS['AUTOLOAD_DIR'] ,
+                                                          'HANDLOAD_DIR'  => GET_DIRS['HANDLOAD_DIR'] ,
+                                                          'LAYERS_DIR'    => GET_DIRS['LAYERS_DIR']   ,
+            'RESOURCES_DIR' => GET_DIRS['RESOURCES_DIR'], 'FILES_DIR'     => GET_DIRS['FILES_DIR']    ,
+                                                          'TEMPLATES_DIR' => GET_DIRS['TEMPLATES_DIR'],
+                                                          'THEMES_DIR'    => GET_DIRS['THEMES_DIR']   ,
+                                                          'PLUGINS_DIR'   => GET_DIRS['PLUGINS_DIR']  ,
+                                                          'UPLOADS_DIR'   => GET_DIRS['UPLOADS_DIR']  ,
         ]);
 
         foreach( CONTAINER_DIRS as $key => $value )

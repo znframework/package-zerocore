@@ -179,7 +179,15 @@ class ZN
                 'LIBRARIES_DIR'   => 'Libraries/',
                 'MODELS_DIR'      => 'Models',
                 'STARTING_DIR'    => 'Starting/',
-                'RESOURCES_DIR'   => 'Resources/'
+                'AUTOLOAD_DIR'    => 'Starting/Autoload/',
+                'HANDLOAD_DIR'    => 'Starting/Handload/',
+                'LAYERS_DIR'      => 'Starting/Layers/',
+                'RESOURCES_DIR'   => 'Resources/',
+                'FILES_DIR'       => 'Resources/Files/',
+                'TEMPLATES_DIR'   => 'Resources/Templates/',
+                'THEMES_DIR'      => 'Resources/Themes/',
+                'PLUGINS_DIR'     => 'Resources/Plugins/',
+                'UPLOADS_DIR'     => 'Resources/Uploads/'
             ],
 
             'EIP' => 
@@ -199,7 +207,15 @@ class ZN
                 'LIBRARIES_DIR'   => 'Libraries/',
                 'MODELS_DIR'      => 'Models/',
                 'STARTING_DIR'    => 'Starting/',
-                'RESOURCES_DIR'   => 'Resources/'
+                'AUTOLOAD_DIR'    => 'Starting/Autoload/',
+                'HANDLOAD_DIR'    => 'Starting/Handload/',
+                'LAYERS_DIR'      => 'Starting/Layers/',
+                'RESOURCES_DIR'   => 'Resources/',
+                'FILES_DIR'       => 'Resources/Files/',
+                'TEMPLATES_DIR'   => 'Resources/Templates/',
+                'THEMES_DIR'      => 'Resources/Themes/',
+                'PLUGINS_DIR'     => 'Resources/Plugins/',
+                'UPLOADS_DIR'     => 'Resources/Uploads/'
             ],
 
             'CE' => 
@@ -219,7 +235,15 @@ class ZN
                 'LIBRARIES_DIR'   => self::$defines['LIBRARIES_DIR']   ?? NULL,
                 'MODELS_DIR'      => self::$defines['MODELS_DIR']      ?? NULL,
                 'STARTING_DIR'    => self::$defines['STARTING_DIR']    ?? NULL,
-                'RESOURCES_DIR'   => self::$defines['RESOURCES_DIR']   ?? NULL
+                'AUTOLOAD_DIR'    => self::$defines['AUTOLOAD_DIR']    ?? NULL,
+                'HANDLOAD_DIR'    => self::$defines['HANDLOAD_DIR']    ?? NULL,
+                'LAYERS_DIR'      => self::$defines['LAYERS_DIR']      ?? NULL,
+                'RESOURCES_DIR'   => self::$defines['RESOURCES_DIR']   ?? NULL,
+                'FILES_DIR'       => self::$defines['FILES_DIR']       ?? NULL,
+                'TEMPLATES_DIR'   => self::$defines['TEMPLATES_DIR']   ?? NULL,
+                'THEMES_DIR'      => self::$defines['THEMES_DIR']      ?? NULL,
+                'PLUGINS_DIR'     => self::$defines['PLUGINS_DIR']     ?? NULL,
+                'UPLOADS_DIR'     => self::$defines['UPLOADS_DIR']     ?? NULL,
             ]
         ]);
 
