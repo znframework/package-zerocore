@@ -141,7 +141,7 @@ class Config
         }
         else
         {
-            return (self::$config[$file][$configs] ?? NULL) ?: self::getDefault();
+            return self::$config[$file][$configs] ?? self::getDefault();
         }
     }
 
