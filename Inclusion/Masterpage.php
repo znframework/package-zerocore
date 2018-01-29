@@ -143,7 +143,7 @@ class Masterpage
         Properties::$parameters = [];
 
         $masterPageSet  = Config::get('Masterpage');
-        $doctypes       = array_merge(Config::expressions('doctypes'), Properties::$doctype);
+        $doctypes       = array_merge(Config::expressions('doctypes') ?: [], Properties::$doctype);
         $docType        = $head['docType'] ?? $masterPageSet["docType"];
         $header         = ($doctypes[$docType] ?? '<!DOCTYPE html>') . EOL;
         $htmlAttributes = Hypertext::attributes($head['attributes']['html'] ?? $masterPageSet['attributes']['html']);

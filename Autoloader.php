@@ -205,9 +205,7 @@ class Autoloader
                 $classMapPage .= '$classMap[\'namespaces\'][\''.$k.'\'] = \''.$v.'\';'.$eol;
             }
         }
-
-        Kernel::isWritable(self::$path);
-
+        
         file_put_contents(self::$path, $classMapPage, FILE_APPEND);
     }
 
