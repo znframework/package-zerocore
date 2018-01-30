@@ -24,10 +24,7 @@ class Kernel
      * @return void
      */
     public static function start()
-    {  
-        # If the use of alias is obvious, it will activate this operation.
-        Autoloader::aliases();
-        
+    {    
         # It keeps the selected project configuration.
         define('PROJECT_CONFIG', Config::get('Project'));
        

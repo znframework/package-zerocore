@@ -351,7 +351,7 @@ class Autoloader
     /**
      * If the use of alias is obvious, it will activate this operation.
      */
-    public static function aliases()
+    protected static function aliases()
     {
         if( $autoloaderAliases = Config::get('Autoloader')['aliases'] ?? NULL ) foreach( $autoloaderAliases as $alias => $origin )
         {
@@ -616,7 +616,11 @@ class Autoloader
      */
     public static function register()
     {
+        # Autoload register.
         spl_autoload_register('Autoloader::run');
+
+        # If the use of alias is obvious, it will activate this operation.
+        self::aliases();
     }
 }
 
