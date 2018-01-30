@@ -135,15 +135,6 @@ interface RouteInterface
      */
     public function change(String $route) : Route;
 
-     /**
-     * Run Route Controller
-     * 
-     * @param string   $functionName
-     * @param callable $functionRun = NULL
-     * @param bool     $usable      = true
-     */
-    public function run(String $functionName, Callable $functionRun = NULL, Bool $usable = true);
-
     /**
      * Redirect Show 404
      * 
