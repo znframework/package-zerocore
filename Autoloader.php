@@ -53,6 +53,14 @@ class Autoloader
 
         $classInfo = self::getClassFileInfo($class);
         $file      = $classInfo['path'];
+
+        # 5.4.2[added]
+        if( PROJECT_TYPE === 'EIP' && self::isCurrentProject($file) === false )
+        {
+            self::replaceWithCurrentProject($file);
+
+            self::restart();
+        }
         
         if( is_file($file) )
         {
@@ -70,12 +78,6 @@ class Autoloader
         }
         else
         {
-            // 5.4.2[added]
-            if( PROJECT_TYPE === 'EIP' && strpos($file, 'Projects/' . CURRENT_PROJECT) !== 0 )
-            {
-                self::restart();
-            }
-
             self::tryAgainCreateClassMap($class);
         }
     }
@@ -579,6 +581,30 @@ class Autoloader
     protected static function _cleanNail($string)
     {
         return str_replace(["'", '"'], NULL, $string);
+    }
+
+    /**
+     * Protected Is Current Project
+     * 
+     * @param string $file
+     * 
+     * @return string
+     */
+    protected static function isCurrentProject($file)
+    {   
+        return strpos($file, PROJECTS_DIR . CURRENT_PROJECT) === 0;
+    }
+
+    /**
+     * Protected Replace With Current Project
+     * 
+     * @param string & $file
+     */
+    protected static function replaceWithCurrentProject(& $file)
+    {
+        $project = rtrim(PROJECTS_DIR, '/');
+
+        $file = preg_replace('/'.$project.'\/(.*?)\//', PROJECTS_DIR . CURRENT_PROJECT . '/', $file);
     }
 
     /**
