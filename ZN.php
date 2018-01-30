@@ -264,7 +264,7 @@ class ZN
         define('ZEROCORE', INTERNAL_DIR . 'ZN/');
 
         # The system gives the knowledge of the actual root directory.
-        define('REAL_BASE_DIR', pathinfo($_SERVER['SCRIPT_FILENAME'], PATHINFO_DIRNAME) . '/');
+        define('REAL_BASE_DIR', self::getCurrentWorkingDirectory());
     }
 
     /**
@@ -322,6 +322,16 @@ class ZN
                 To do this, specify the corresponding controller directory in the [index.php] file.'
             );
         }
+    }
+
+    /**
+     * Protected Get Current Working Directory
+     * 
+     * @return string
+     */
+    protected static function getCurrentWorkingDirectory()
+    {
+        return (getcwd() ?: pathinfo($_SERVER['SCRIPT_FILENAME'], PATHINFO_DIRNAME)) . '/';
     }
 
     /**
