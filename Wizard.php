@@ -143,11 +143,11 @@ class Wizard
         {
             $array =
             [
-                '/@endforelse'.self::CRLF.'*/'                                          => '<?php endif; ?>',                                       
+                '/@endforelse'.self::CRLF.'*/'                                       => '<?php endif; ?>',                                       
                 '/@forelse\s*\((\s*(.*?)\s+as\s+(.*?))\)'.self::CRLF.'/s'            => '<?php if( ! empty($2) ): foreach($1): ?>',
                 '/@empty'.self::CRLF.'/'                                             => '<?php endforeach; else: ?>',     
                 '/@loop\s*\((.*?)\)'.self::CRLF.'/s'                                 => '<?php foreach($1 as $key => $value): ?>',    
-                '/@endloop'.self::CRLF.'/'                                            => '<?php endforeach; ?>',         
+                '/@endloop'.self::CRLF.'/'                                           => '<?php endforeach; ?>',         
                 '/@(endif|endforeach|endfor|endwhile|break|continue)'.self::CRLF.'/' => '<?php $1 ?>',
                 '/@(elseif|if|else|foreach|for|while)\s*(.*?)'.self::CRLF.'/s'       => '<?php $1$2: ?>'
             ];
