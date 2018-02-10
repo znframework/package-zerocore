@@ -26,7 +26,7 @@ class Security
      */
     public static function createCSRFTokenKey()
     {
-       $_SESSION['token'] = random_bytes(32);
+       $_SESSION['token'] = bin2hex(random_bytes(32));
     }
 
     /**
@@ -47,6 +47,8 @@ class Security
 
         if( $method ?? NULL )
         {
+            Storage::start();
+
             $token = $method['token'];
 
             if( $token === false || $token !== $_SESSION['token'] )

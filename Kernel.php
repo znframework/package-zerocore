@@ -45,7 +45,7 @@ class Kernel
         }
 
         # Session process is starting.
-        session_start();
+        Storage::start();
        
         # Sends defined header information.
         Base::headers(PROJECT_CONFIG['headers'] ?? []);
