@@ -26,7 +26,7 @@ class Security
      */
     public static function createCSRFTokenKey()
     {
-       $_SESSION['token'] = bin2hex(random_bytes(32));
+       $_SESSION['token'] = self::createHashCode();
     }
 
     /**
@@ -49,12 +49,25 @@ class Security
         {
             Storage::start();
 
-            $token = $method['token'];
+            $mtoken = $method['token']   ?? self::createHashCode(16);
+            $stoken = $_SESSION['token'] ?? self::createHashCode(8);
 
-            if( $token === false || $token !== $_SESSION['token'] )
+            if( $mtoken !== $stoken )
             {
                 Response::redirect($uri);
             }
         }
+    }
+
+    /**
+     * Create Hash Code
+     * 
+     * @param int $len = 32
+     * 
+     * @return string
+     */
+    protected static function createHashCode(Int $len = 32)
+    {
+        return bin2hex(random_bytes($len));
     }
 }
