@@ -145,7 +145,7 @@ class ZN
     {
         # Defined Standart Constants
         define('REQUIRED_PHP_VERSION', '7.0.0');
-        define('SSL_STATUS', (($_SERVER['HTTPS'] ?? NULL) === 'on' ? 'https' : 'http') . '://');
+        define('SSL_STATUS', ((($_SERVER['HTTPS'] ?? NULL) === 'on' && $_SERVER['SERVER_PORT'] == 443) ? 'https' : 'http') . '://');
         define('PROJECT_CONTROLLER_NAMESPACE', 'Project\Controllers\\');
         define('PROJECT_COMMANDS_NAMESPACE' , 'Project\Commands\\');
         define('EXTERNAL_COMMANDS_NAMESPACE', 'External\Commands\\');
