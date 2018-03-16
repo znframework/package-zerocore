@@ -46,7 +46,7 @@ class Route extends FilterProperties implements RouteInterface
      */
     public function __construct()
     {
-        $this->getConfig = Config::get('Services', 'route');
+        $this->getConfig = Config::get('Routing');
     }
 
     /**
@@ -72,9 +72,9 @@ class Route extends FilterProperties implements RouteInterface
             $this->change('404');
         }
 
-        Config::set('Services', 'route', ['show404' => $this->route]);
+        Config::set('Routing', 'show404', $this->route);
 
-        $this->uri($controllerAndMethod);
+        $this->uri($controllerAndMethod, false);
     }
 
     /**
@@ -143,7 +143,7 @@ class Route extends FilterProperties implements RouteInterface
         }
 
         $configPatternType = $routeConfig['patternType'];
-
+        
         if( $configPatternType === 'classic' )
         {
             $routeString = Singleton::class('ZN\Regex')->special2classic($this->route);
@@ -171,10 +171,7 @@ class Route extends FilterProperties implements RouteInterface
         {
             $config = $this->getConfig;
 
-            Config::set('Services', 'route',
-            [
-                'changeUri' => array_merge($this->routes['changeUri'], $config['changeUri'])
-            ]);
+            Config::set('Routing', 'changeUri', array_merge($this->routes['changeUri'], $config['changeUri']));
 
             $this->defaultVariable();
         }
@@ -256,43 +253,6 @@ class Route extends FilterProperties implements RouteInterface
     }
 
     /**
-     * Run Route Controller
-     * 
-     * @param string   $functionName
-     * @param callable $functionRun = NULL
-     * @param bool     $usable      = true
-     */
-    public function run(String $functionName, Callable $functionRun = NULL, Bool $usable = true)
-    {
-        if( in_array($functionName, ['construct', 'destruct']) )
-        {
-            call_user_func_array($functionRun, CURRENT_CPARAMETERS);
-        }
-
-        if( is_file(CURRENT_CFILE) )
-        {
-            $matches = ( $usable === true ? $functionName === CURRENT_CFUNCTION : false );
-
-            if( $matches )
-            {
-                $this->uri(CURRENT_CFURI);
-
-                $this->filter();
-
-                call_user_func_array($functionRun, CURRENT_CPARAMETERS);
-
-                $this->import($functionName);
-
-                $this->status[] = $functionName;
-
-                return;
-            }
-        }
-
-        $this->useRunMethod = true;
-    }
-
-    /**
      * Redirect Show 404
      * 
      * @param string $function
@@ -349,15 +309,6 @@ class Route extends FilterProperties implements RouteInterface
         $route       = [$route => $changeRoute];
 
         return $route;
-    }
-
-    /**
-     * Protected Import
-     */
-    protected function import($function)
-    {
-        Kernel::viewPathFinder($function, $viewPath, $wizardPath);
-        Kernel::viewAutoload($wizardPath, $viewPath);
     }
 
     /**

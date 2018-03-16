@@ -120,8 +120,7 @@ class Errors
         return error_reporting();
     }
 
-
-     /**
+    /**
      * Exception handler
      * 
      * @param void

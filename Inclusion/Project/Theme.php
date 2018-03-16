@@ -58,7 +58,11 @@ class Theme
 
                     if( is_file(THEMES_DIR . $suffix) )
                     {
-                        return str_replace($path, Request::getBaseURL(THEMES_DIR) . $suffix, $orig);
+                        return self::getReplacePath($path, THEMES_DIR, $suffix, $orig);
+                    }
+                    elseif( is_file(EXTERNAL_THEMES_DIR . $suffix) )
+                    {
+                        return self::getReplacePath($path, EXTERNAL_THEMES_DIR, $suffix, $orig);
                     }
                 }     
 
@@ -66,5 +70,13 @@ class Theme
                 
             }, $data
         );
+    }
+
+    /**
+     * protected get replace path
+     */
+    protected static function getReplacePath($path, $dir, $suffix, $orig)
+    {
+        return str_replace($path, Request::getBaseURL($dir) . $suffix, $orig);
     }
 }

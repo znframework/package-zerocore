@@ -107,7 +107,11 @@ class Exceptions extends \Exception implements ExceptionsInterface
 
         $projectError = Config::get('Project');
 
-        if( in_array($no, $projectError['exitErrors'], true) || in_array(self::$errorCodes[$no] ?? NULL, $projectError['exitErrors'], true) )
+        if
+        ( 
+            in_array($no, $projectError['exitErrors'] ?? [], true) || 
+            in_array(self::$errorCodes[$no] ?? NULL, $projectError['exitErrors'] ?? [], true) 
+        )
         {
             exit($table);
         }
@@ -191,19 +195,6 @@ class Exceptions extends \Exception implements ExceptionsInterface
             'line'    => $line,
             'trace'   => $trace
         ];
-
-        if( $passed = self::_argumentPassed($msg, $file, $line, $trace) )
-        {
-            if( ! is_array($passed) )
-            {
-                return false;
-            }
-
-            if( $projects['invalidParameterErrorType'] === 'external' )
-            {
-                $exceptionData = $passed;
-            }
-        }
         
         if( stristr($exceptionData['file'] ?? $file, '/Buffering.php') )
         {
@@ -323,67 +314,6 @@ class Exceptions extends \Exception implements ExceptionsInterface
     }
 
     /**
-     * Handle argument passed
-     * 
-     * @param string $msg
-     * @param string $file
-     * @param string $line
-     * @param array  $trace
-     * 
-     * @return mixed
-     */
-    protected static function _argumentPassed($msg, $file, $line, $trace)
-    {
-        $exceptionData = false;
-
-        preg_match
-        (
-            '/^Argument\s(\d)+\spassed\sto\s(.*?)::(.*?)\smust\sbe\s\w+\s\w+\s\w+\s(.*?),\s(\w+)\sgiven/xi',
-            $msg,
-            $match
-        );
-
-        $message  = ! empty($match[0]) ? $match[0] : NULL;
-        $argument = ! empty($match[1]) ? $match[1] : NULL;
-        $class    = ! empty($match[2]) ? $match[2] : NULL;
-        $method   = ! empty($match[3]) ? $match[3] : NULL;
-        $type     = ! empty($match[4]) ? strtolower(Datatype::divide($match[4], '\\', -1)) : NULL;
-        $data     = ! empty($match[5]) ? strtolower($match[5]) : NULL;
-
-        if( empty($match) )
-        {
-            return false;
-        }
-
-        if( ! empty($trace) )
-        {
-            $traceInfo = self::_traceFinder($trace, 2, 3);
-        }
-        else
-        {
-            $traceInfo = self::_traceFinder(debug_backtrace(2), 7, 5);
-        }
-
-        if( $type !== $data )
-        {
-            $langMessage1 = '['.$class.'::'.$method.'] p'.$argument.':';
-            $langMessage2 = '[`'.$type.'`]';
-
-            $exceptionData =
-            [
-                'message' => Lang::select('Error', 'typeHint', ['&' => $langMessage1, '%' => $langMessage2]),
-                'file'    => $traceInfo['file'],
-                'line'    => $traceInfo['line'],
-                'trace'   => $trace
-            ];
-
-            return $exceptionData;
-        }
-
-        return true;
-    }
-
-    /**
      * Handle template wizard
      * 
      * @param void
@@ -397,7 +327,7 @@ class Exceptions extends \Exception implements ExceptionsInterface
 
         foreach( $args as $key => $value )
         {
-            if( preg_match('/Views\/.*?\.\wizard\.php/', $find = ($value['args'][0] ?? NULL)) )
+            if( is_array($value) && preg_match('/Views\/.*?\.\wizard\.php/', $find = ($value['args'][0] ?? NULL)) )
             {
                 $file = $find;
             }

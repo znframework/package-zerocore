@@ -222,7 +222,7 @@ class Filesystem
     {
         if( ! is_dir($path) )
         {
-            return false;
+            return [];
         }
 
         if( is_array($extension) )

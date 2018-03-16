@@ -16,6 +16,13 @@ use ZN\Hypertext;
 class Masterpage
 {
     /**
+     * Keeps Settings
+     * 
+     * @var array
+     */
+    protected static $settings = [];
+
+    /**
      * Sets Head Data
      * 
      * @param array $headData
@@ -38,7 +45,7 @@ class Masterpage
      */
     public function body(String $body) : Masterpage
     {
-        Config::set('Masterpage', 'bodyPage', $body);
+        self::$setting['bodyPage'] = $body;
 
         return $this;
     }
@@ -52,7 +59,7 @@ class Masterpage
      */
     public function head($head) : Masterpage
     {
-        Config::set('Masterpage', 'headPage', $head);
+        self::$setting['headPage'] = $head;
 
         return $this;
     }
@@ -66,7 +73,7 @@ class Masterpage
      */
     public function title(String $title) : Masterpage
     {
-        Config::set('Masterpage', 'title', $title);
+        self::$setting['title'] = $title;
 
         return $this;
     }
@@ -80,7 +87,7 @@ class Masterpage
      */
     public function meta(Array $meta) : Masterpage
     {
-        Config::set('Masterpage', 'meta', $meta);
+        self::$setting['meta'] = $meta;
 
         return $this;
     }
@@ -94,7 +101,7 @@ class Masterpage
      */
     public function attributes(Array $attributes) : Masterpage
     {
-        Config::set('Masterpage', 'attributes', $attributes);
+        self::$setting['attributes'] = $attributes;
 
         return $this;
     }
@@ -108,7 +115,7 @@ class Masterpage
      */
     public function content(Array $content) : Masterpage
     {
-        Config::set('Masterpage', 'content', $content);
+        self::$setting['content'] = $content;
 
         return $this;
     }
@@ -142,8 +149,13 @@ class Masterpage
 
         Properties::$parameters = [];
 
+        if( ! empty(self::$settings) )
+        {
+            Config::set('Masterpage', self::$settings);
+        }
+        
         $masterPageSet  = Config::get('Masterpage');
-        $doctypes       = array_merge(Config::expressions('doctypes'), Properties::$doctype);
+        $doctypes       = array_merge(Config::get('Expressions', 'doctypes'), Properties::$doctype);
         $docType        = $head['docType'] ?? $masterPageSet["docType"];
         $header         = ($doctypes[$docType] ?? '<!DOCTYPE html>') . EOL;
         $htmlAttributes = Hypertext::attributes($head['attributes']['html'] ?? $masterPageSet['attributes']['html']);

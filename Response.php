@@ -23,7 +23,7 @@ class Response
      */
     public static function redirectInvalidRequest()
     {
-        $invalidRequest = Config::get('Services', 'route')['requestMethods'];
+        $invalidRequest = Config::get('Routing', 'requestMethods');
 
         if( empty($invalidRequest['page']) )
         {
