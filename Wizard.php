@@ -16,7 +16,7 @@ class Wizard
      * 
      * @const string
      */
-    const CRLF = '(\n|' . PHP_EOL . '|\:)';
+    const CRLF = '(\n|' . PHP_EOL . '|\:|$)';
 
     /**
      * Get config
@@ -143,14 +143,14 @@ class Wizard
         {
             $array =
             [
-                '/@endforelse'.self::CRLF.'*/'                                        => '<?php endif; ?>',                                       
-                '/@forelse\s*\((\s*(.*?)\s+as\s+(.*?))\)'.self::CRLF.'/s'             => '<?php if( ! empty($2) ): foreach($1): ?>',
-                '/@empty'.self::CRLF.'/'                                              => '<?php endforeach; else: ?>',     
-                '/@loop\s*\((.*?)\)'.self::CRLF.'/s'                                  => '<?php foreach($1 as $key => $value): ?>',    
-                '/@endloop'.self::CRLF.'/'                                            => '<?php endforeach; ?>',         
-                '/@(endif|endforeach|endfor|endwhile|break|continue)'.self::CRLF.'*/' => '<?php $1 ?>',
-                '/@(elseif|if|foreach|for|while)\s*(.*?)'.self::CRLF.'/s'             => '<?php $1$2: ?>',
-                '/@else'.self::CRLF.'*/'                                              => '<?php else: ?>',
+                '/@endforelse'.self::CRLF.'*/m'                                        => '<?php endif; ?>',                                       
+                '/@forelse\s*\((\s*(.*?)\s+as\s+(.*?))\)'.self::CRLF.'/sm'             => '<?php if( ! empty($2) ): foreach($1): ?>',
+                '/@empty'.self::CRLF.'/m'                                              => '<?php endforeach; else: ?>',     
+                '/@loop\s*\((.*?)\)'.self::CRLF.'/sm'                                  => '<?php foreach($1 as $key => $value): ?>',    
+                '/@endloop'.self::CRLF.'/m'                                            => '<?php endforeach; ?>',         
+                '/@(endif|endforeach|endfor|endwhile|break|continue)'.self::CRLF.'*/m' => '<?php $1 ?>',
+                '/@(elseif|if|foreach|for|while)\s*(.*?)'.self::CRLF.'/sm'             => '<?php $1$2: ?>',
+                '/@else'.self::CRLF.'*/m'                                              => '<?php else: ?>',
             ];
         }
 
@@ -170,7 +170,7 @@ class Wizard
 
         if( self::$config['printable'] ?? true )
         {
-            $suffix   = self::CRLF.'/s';
+            $suffix   = self::CRLF.'/sm';
             $coalesce = '\?';
             $constant = '((\w+)(\[(\'|\")*.*?(\'|\")*\])*)';
             $variable = '/@\$(\w+.*?)';
@@ -207,7 +207,7 @@ class Wizard
 
         if( self::$config['functions'] ?? true )
         {
-            $function = '(\w+.*?(\)|\}|\]|\-\>\w+))'.self::CRLF.'/s';
+            $function = '(\w+.*?(\)|\}|\]|\-\>\w+))'.self::CRLF.'/sm';
             $array    =
             [
                 '/((\W)@|^@)' . $function => '$2<?php if( is_scalar($3) ) echo $3; ?>'  # Function
@@ -308,9 +308,9 @@ class Wizard
             [
                 '/\/#/'                                         => '+[symbol??dies]+',
                 '/\s+\#\#(\w+)/'                                => '</$1>',
-                '/'.$htmlAttributesTag.self::CRLF.'/'           => '<$2 $4>',
+                '/'.$htmlAttributesTag.self::CRLF.'/m'          => '<$2 $4>',
                 '/'.$htmlAttributesTag.'\s+/'                   => '<$2 $4>',
-                '/'.$htmlAttributesTag.'\s*\(\s*(.*?)\s*\)'.self::CRLF.'/s' => '<$2 $4>$5</$2>',
+                '/'.$htmlAttributesTag.'\s*\(\s*(.*?)\s*\)'.self::CRLF.'/sm' => '<$2 $4>$5</$2>',
                 '/'.$htmlAttributesTag.'\s*/'                   => '<$2 $4>',
                 '/\<(\w+)\s+\>/'                                => '<$1>',
                 '/\+\[symbol\?\?dies\]\+/'                      => '#'
