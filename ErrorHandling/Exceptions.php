@@ -207,6 +207,8 @@ class Exceptions extends \Exception implements ExceptionsInterface
             }
         }
 
+        ob_end_clean();
+
         return Inclusion\Template::use('ExceptionTable', $exceptionData, true);
     }
 
