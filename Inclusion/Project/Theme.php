@@ -48,7 +48,7 @@ class Theme
         (
             [
                 '/<(link|img|script|div)\s(.*?)(href|src)\=\"(.*?)\"(.*?)\>/i',
-                '/(background)(-url)(\:)\((.*?)\)/i'
+                '/(background)(-image)*\s*(\:)\s*url\((.*?)\)/i'
             ], 
             function($selector) use ($themeName)
             {
