@@ -369,8 +369,14 @@ class In
 
         $controllerPath  = ! empty($controllerEx[0]) ? $controllerEx[0] : '';
         $controllerFunc  = ! empty($controllerEx[1]) ? $controllerEx[1] : 'main';
-        $controllerFile  = CONTROLLERS_DIR . Base::suffix($controllerPath, '.php');
+        $controllerFile  = CONTROLLERS_DIR . ($suffixExtension = Base::suffix($controllerPath, '.php'));
         $controllerClass = Datatype::divide($controllerPath, '/', -1);
+
+        # Virtual Controller - Added[5.6.0]
+        if( ! is_file($controllerFile) )
+        {
+            $controllerFile = EXTERNAL_CONTROLLERS_DIR . $suffixExtension;
+        }
 
         if( is_file($controllerFile) )
         {

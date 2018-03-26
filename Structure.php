@@ -34,7 +34,13 @@ class Structure
         if( isset($segments[0]) )
         {
             $page   = $segments[0];
-            $isFile = CONTROLLERS_DIR . Base::suffix($page, '.php');
+            $isFile = CONTROLLERS_DIR . ($suffixExtension = Base::suffix($page, '.php'));
+
+            # Virtual Controller - Added[5.6.0]
+            if( ! is_file($isFile) )
+            {
+                $isFile = EXTERNAL_CONTROLLERS_DIR . $suffixExtension;
+            }
 
             if( ! is_file($isFile) )
             {

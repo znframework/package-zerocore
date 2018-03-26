@@ -281,23 +281,23 @@ class ZN
         
         self::defineCurrentProject();
         
-        define('CONTROLLERS_DIR' , PROJECT_DIR . GET_DIRS['CONTROLLERS_DIR']);
         define('VIEWS_DIR'       , PROJECT_DIR . GET_DIRS['VIEWS_DIR']);
         define('PAGES_DIR'       , VIEWS_DIR); 
         define('CONTAINER_DIRS', 
         [
-            'ROUTES_DIR'    => GET_DIRS['ROUTES_DIR']   , 'DATABASES_DIR' => GET_DIRS['DATABASES_DIR'],
-            'CONFIG_DIR'    => GET_DIRS['CONFIG_DIR']   , 'STORAGE_DIR'   => GET_DIRS['STORAGE_DIR']  ,
-            'COMMANDS_DIR'  => GET_DIRS['COMMANDS_DIR'] , 'LANGUAGES_DIR' => GET_DIRS['LANGUAGES_DIR'],
-            'LIBRARIES_DIR' => GET_DIRS['LIBRARIES_DIR'], 'MODELS_DIR'    => GET_DIRS['MODELS_DIR']   ,
-            'STARTING_DIR'  => GET_DIRS['STARTING_DIR'] , 'AUTOLOAD_DIR'  => GET_DIRS['AUTOLOAD_DIR'] ,
-                                                          'HANDLOAD_DIR'  => GET_DIRS['HANDLOAD_DIR'] ,
-                                                          'LAYERS_DIR'    => GET_DIRS['LAYERS_DIR']   ,
-            'RESOURCES_DIR' => GET_DIRS['RESOURCES_DIR'], 'FILES_DIR'     => GET_DIRS['FILES_DIR']    ,
-                                                          'TEMPLATES_DIR' => GET_DIRS['TEMPLATES_DIR'],
-                                                          'THEMES_DIR'    => GET_DIRS['THEMES_DIR']   ,
-                                                          'PLUGINS_DIR'   => GET_DIRS['PLUGINS_DIR']  ,
-                                                          'UPLOADS_DIR'   => GET_DIRS['UPLOADS_DIR']  ,
+            'ROUTES_DIR'    => GET_DIRS['ROUTES_DIR']   , 'DATABASES_DIR'   => GET_DIRS['DATABASES_DIR']  ,
+            'CONFIG_DIR'    => GET_DIRS['CONFIG_DIR']   , 'STORAGE_DIR'     => GET_DIRS['STORAGE_DIR']    ,
+            'COMMANDS_DIR'  => GET_DIRS['COMMANDS_DIR'] , 'LANGUAGES_DIR'   => GET_DIRS['LANGUAGES_DIR']  ,
+            'LIBRARIES_DIR' => GET_DIRS['LIBRARIES_DIR'], 'MODELS_DIR'      => GET_DIRS['MODELS_DIR']     ,
+            'STARTING_DIR'  => GET_DIRS['STARTING_DIR'] , 'AUTOLOAD_DIR'    => GET_DIRS['AUTOLOAD_DIR']   ,
+                                                          'HANDLOAD_DIR'    => GET_DIRS['HANDLOAD_DIR']   ,
+                                                          'LAYERS_DIR'      => GET_DIRS['LAYERS_DIR']     ,
+                                                          'CONTROLLERS_DIR' => GET_DIRS['CONTROLLERS_DIR'],
+            'RESOURCES_DIR' => GET_DIRS['RESOURCES_DIR'], 'FILES_DIR'       => GET_DIRS['FILES_DIR']      ,
+                                                          'TEMPLATES_DIR'   => GET_DIRS['TEMPLATES_DIR']  ,
+                                                          'THEMES_DIR'      => GET_DIRS['THEMES_DIR']     ,
+                                                          'PLUGINS_DIR'     => GET_DIRS['PLUGINS_DIR']    ,
+                                                          'UPLOADS_DIR'     => GET_DIRS['UPLOADS_DIR']    ,
         ]);
 
         foreach( CONTAINER_DIRS as $key => $value )
