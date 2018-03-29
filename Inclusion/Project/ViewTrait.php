@@ -40,7 +40,10 @@ trait ViewTrait
      */
     public static function __callStatic($method, $parameters)
     {
-        self::call($method, $parameters);
+        if( ($return = self::call($method, $parameters)) !== NULL )
+        {
+            return $return;
+        }
 
         return new self;
     }
@@ -55,7 +58,10 @@ trait ViewTrait
      */
     public function __call($method, $parameters)
     {
-        self::call($method, $parameters);
+        if( ($return = self::call($method, $parameters)) !== NULL )
+        {
+            return $return;
+        }
 
         return $this;
     }
@@ -70,6 +76,11 @@ trait ViewTrait
      */
     protected static function call($method, $parameters)
     {
+        if( isset(self::$data[$method]) && empty($parameters) )
+        {
+            return self::$data[$method];
+        }
+
         if( is_scalar($parameters[0]) )
         {
             $ex = explode(':', $parameters[0]);
@@ -94,5 +105,7 @@ trait ViewTrait
         {
             self::$data[$method] = $parameters[0] ?? false;
         }
+
+        return NULL;
     }
 }
