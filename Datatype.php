@@ -72,8 +72,9 @@ class Datatype
      * @param string $str       = NULL
      * @param string $separator = '|'
      * @param string $index     = '0'
+     * @param string $count     = '1'
      */
-    public static function divide(String $str = NULL, String $separator = '|', String $index = '0')
+    public static function divide(String $str = NULL, String $separator = '|', String $index = '0', String $count = '1')
     {
         $arrayEx = explode($separator, $str);
 
@@ -90,7 +91,35 @@ class Datatype
             default                : $ind = $index;
         }
 
-        return $arrayEx[$ind] ?? false;
+        if( $count === '1' )
+        {
+            return $arrayEx[$ind] ?? false;
+        }
+        else
+        {
+            $return = NULL;
+
+            if( $count === 'all' )
+            {
+                $count = count($arrayEx) - $ind;
+            }
+            elseif( $count < 0 )
+            {
+                $count = count($arrayEx) + $count;
+            }
+
+            for( $i = 0; $i < $count; $i++ )
+            {
+                if( ! isset($arrayEx[$ind + $i]) )
+                {
+                    break;
+                }
+                
+                $return .= $arrayEx[$ind + $i] . $separator;
+            }
+
+            return rtrim($return, $separator);
+        }
     }
 
     /**
