@@ -34,6 +34,13 @@ class Singleton
 
         if( ! isset(self::$singleton[$lower]) ) 
         {
+            if( ! class_exists($class) )
+            {
+                $classInfo = Autoloader::getClassFileInfo($class);
+
+                $class = $classInfo['namespace'];
+            }
+            
             self::$singleton[$lower] = new $class;
         }
 
