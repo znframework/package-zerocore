@@ -151,6 +151,13 @@ class Wizard
                 '/@(endif|endforeach|endfor|endwhile|break|continue)'.self::CRLF.'*/m' => '<?php $1 ?>',
                 '/@(elseif|if|foreach|for|while)\s*(.*?)'.self::CRLF.'/sm'             => '<?php $1$2: ?>',
                 '/@else'.self::CRLF.'*/m'                                              => '<?php else: ?>',
+                '/@view\s*\((.*?)\)'.self::CRLF.'/sm'                                  => '<?php Import::view($1) ?>',
+                '/@script\s*\((.*?)\)'.self::CRLF.'/sm'                                => '<?php Import::script($1) ?>',
+                '/@style\s*\((.*?)\)'.self::CRLF.'/sm'                                 => '<?php Import::style($1) ?>',
+                '/@template\s*\((.*?)\)'.self::CRLF.'/sm'                              => '<?php Import::template($1) ?>',
+                '/@theme\s*\((.*?)\)'.self::CRLF.'/sm'                                 => '<?php Import::theme($1) ?>',
+                '/@plugin\s*\((.*?)\)'.self::CRLF.'/sm'                                => '<?php Import::plugin($1) ?>',
+                '/@view(\(\))*'.self::CRLF.'/sm'                                       => '<?php echo $view ?>', 
             ];
         }
 
