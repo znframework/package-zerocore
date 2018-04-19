@@ -9,6 +9,7 @@
  * @author  Ozan UYKUN [ozan@znframework.com]
  */
 
+use ZN\Filesystem;
 use ZN\Services\Restful;
 use ZN\Protection\Separator;
 use ZN\ErrorHandling\Exceptions;
@@ -23,6 +24,20 @@ class ZN
     protected static $defines = [];
 
     /**
+     * Upgrade Error
+     * 
+     * @var string
+     */
+    public static $upgradeError;
+
+    /**
+     * Project Type
+     * 
+     * @var string
+     */
+    public static $projectType;
+
+    /**
      * Magic call static
      * 
      * @param string $class
@@ -33,6 +48,67 @@ class ZN
     public static function __callStatic($class, $parameters)
     {
         return Singleton::class($class, $parameters);
+    }
+
+    /**
+     * Upgrade system
+     * 
+     * @param void
+     * 
+     * @return bool
+     */
+    public static function upgrade()
+    {
+        $return = self::getRestGithubResult();
+
+        if( ! empty($return) )
+        {
+            $upgradeFolder = 'Upgrade'.md5('upgrade').'/';
+
+            Filesystem::createFolder($upgradeFolder);
+
+            foreach( $return as $file => $content )
+            {
+                $file = $upgradeFolder . $file;
+
+                $dirname = pathinfo($file, PATHINFO_DIRNAME);
+
+                Filesystem::createFolder($dirname); 
+                
+                if( ! empty($content) )
+                {
+                    file_put_contents($file, $content);
+                } 
+            }
+
+            Filesystem::copy($upgradeFolder, '/'); Filesystem::deleteFolder($upgradeFolder);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get upgrade error
+     * 
+     * @return string
+     */
+    public static function upgradeError()
+    {
+        return self::$upgradeError ?: false;
+    }
+
+    /**
+     * Get upgrade files
+     * 
+     * @param void
+     * 
+     * @return array
+     */
+    public static function upgradeFiles()
+    {
+        return array_keys(self::getRestGithubResult());
     }
 
     /**
@@ -73,7 +149,8 @@ class ZN
         define('ZN_DEDICATE', $dedicate);
 
         # It shows you which framework you are using. SE for single edition, EIP for multi edition.
-        define('PROJECT_TYPE', $type);
+        define('PROJECT_TYPE', $type === 'FE' ? 'EIP' : $type);
+        self::$projectType = $type;
 
         # Define standart constants
         self::predefinedConstants();
@@ -453,6 +530,62 @@ class ZN
         {
             Base::trace('["'.$projectDir.'"] Project Directory Not Found!');
         }
+    }
+
+    /**
+     * Get restful class
+     * 
+     * @return \ZN\Services\Restful
+     */
+    protected static function getRestfulClass()
+    {
+        return new Restful;
+    }
+
+    /**
+     * protected restful
+     * 
+     * @param void
+     * 
+     * @return array
+     */
+    protected static function getRestGithubResult()
+    {
+        $restful = self::getRestfulClass();
+        $return  = $restful->useragent(true)->get('https://api.github.com/repos/znframework/fullpack-edition/tags');
+
+        $updatedFiles = [];
+
+        if( isset($return->message) )
+        {
+            self::$upgradeError = $return->message;
+
+            return $updatedFiles;
+        }
+
+        $lastest = $return[0];
+ 
+        if( ZN_VERSION < $lastest->name ) foreach( $return as $version )
+        {
+            if( ZN_VERSION < $version->name )
+            {
+                $commit = $restful->useragent(true)->get($version->commit->url);
+
+                foreach( $commit->files as $file )
+                {
+                    if( ! isset($updatedFiles[$file->filename]) )
+                    {
+                        $updatedFiles[$file->filename] = file_get_contents($file->raw_url);
+                    }        
+                }
+            }
+            else
+            {
+                break;
+            }
+        }
+        
+        return $updatedFiles;
     }
 
     /**
