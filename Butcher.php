@@ -566,7 +566,7 @@ class Initialize extends Controller
 
         if( $body !== false )
         {
-            file_put_contents($mainFile, $this->bodyParser($body));
+            file_put_contents($mainFile, $this->globalPageParser($this->bodyParser($body)));
         }
 
         if( $head !== false && $controller === $this->routeConfig()['openController'] )
@@ -575,7 +575,7 @@ class Initialize extends Controller
 
             $headFile = $sectionsDirectory . 'head.wizard.php';
             
-            file_put_contents($headFile, $this->addSlashesToAt($head));
+            file_put_contents($headFile, $this->globalPageParser($this->addSlashesToAt($head)));
         }      
     }
 
@@ -599,6 +599,19 @@ class Initialize extends Controller
             return $link[0];
 
         }, $body));
+    }
+
+    /**
+     * Protected global parser
+     */
+    protected function globalPageParser($page)
+    {
+        return preg_replace
+        (
+            ['/(\.\.\/)+/'],
+            ['//'],
+            $page
+        );
     }
 
     /**
