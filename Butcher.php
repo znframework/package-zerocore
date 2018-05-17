@@ -151,7 +151,7 @@ class Butcher
 
             if( empty($themes) )
             {
-                return $this->lang['butcher:notFoundExternalButcheryThemes'];
+                return $this->getLangValue('notFoundExternalButcheryThemes');
             }
 
             foreach( $themes as $theme )
@@ -159,14 +159,14 @@ class Butcher
                $this->runProjectExtract($theme, $case, $force, $location);
             }
 
-            return $this->lang['butcher:extractThemeSuccess'];
+            return $this->getLangValue('extractThemeSuccess');
         }
         else
         {
             return $this->runProjectExtract($which, $case, $force, $location);
         }  
 
-        return $this->lang['butcher:cantExtractTheme'];
+        return $this->getLangValue('cantExtractTheme');
     }
 
     /**
@@ -213,6 +213,8 @@ class Butcher
 
         if( $theme === 'multiple' )
         {
+            $this->openZipFiles($this->getCurrentProjectButcheryDirectory());
+
             if( $directories = Filesystem::getFiles($this->getCurrentProjectButcheryDirectory(), 'dir') )
             {
                 foreach( $directories as $directory )
@@ -223,7 +225,11 @@ class Butcher
     
                     $this->singleRun();
                 }
-            }      
+            }  
+            else
+            {
+                return $this->getLangValue('cantMultipleExtractTheme', $this->getCurrentProjectButcheryDirectory());
+            }    
         }
         else
         {
@@ -232,7 +238,15 @@ class Butcher
             $this->singleRun();
         }
 
-        return $this->lang['butcher:extractThemeSuccess'];
+        return $this->getLangValue('extractThemeSuccess');
+    }
+
+    /**
+     * Protected get lang value
+     */
+    protected function getLangValue($key, $string = NULL)
+    {
+        return str_replace('%', $string, $this->lang['butcher:' . $key]);
     }
 
     /**
@@ -306,10 +320,10 @@ class Butcher
                 Filesystem::deleteFolder($this->currentButcheryDirectory);
             }
 
-            return $this->lang['butcher:extractThemeSuccess'];
+            return $this->getLangValue('extractThemeSuccess');
         }
 
-        return $this->lang['butcher:cantExtractTheme'];
+        return $this->getLangValue('cantExtractTheme');
     }
 
     /**
