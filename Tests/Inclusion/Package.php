@@ -13,14 +13,18 @@ use ZN\Controller\UnitTest;
 
 class Package extends UnitTest
 {
-    const unit =
-    [
-        'class'   => 'ZN\Inclusion\Package',
-        'methods' => 
-        [
-            'use'     => [['Default/example.css']],
-            'theme'   => [['Default/example.css']],
-            'plugin'  => [['Default/example.css']]
-        ]
-    ];
+    public function _use()
+    {
+        $this->compare(NULL, $this->use('Default/example.css'));
+    }
+
+    public function _theme()
+    {
+        $this->compare(NULL, $this->theme('Default/example.css'));
+    }
+
+    public function _plugin()
+    {
+        $this->compare(NULL, $this->plugin('Default/example.css'));
+    }
 }
