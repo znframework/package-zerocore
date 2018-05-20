@@ -68,7 +68,7 @@ trait UnitTest
 
                 $met = self::convertMultipleMethodName($met);
 
-                self::$unitMethods[ltrim($met, '_')] = self::$parameters[$key];
+                self::$unitMethods[$met] = self::$parameters[$key];
             }
         }
 
@@ -87,7 +87,7 @@ trait UnitTest
         }
 
         $tester = Singleton::class('ZN\Helpers\Tester');
-   
+        
         $tester->class($class)
                ->methods($methods)
                ->compares(self::$compares)
@@ -141,10 +141,10 @@ trait UnitTest
      */
     protected function compare($first, $second)
     {
-        $method = ltrim(debug_backtrace()[1]['function'], '_');
+        $method = debug_backtrace()[1]['function'];
 
         $method = self::convertMultipleMethodName($method);
-        
+       
         self::$compares[$method] = $first === $second;
     }
     
@@ -155,9 +155,9 @@ trait UnitTest
     {
         if( preg_match('/(\w+)([0-9]+)/', $name, $match) )
         {
-            return $match[1] . ':' . $match[2] ;
+            $name = $match[1] . ':' . $match[2] ;
         }
 
-        return $name; 
+        return ltrim($name, '_');
     }
 }
