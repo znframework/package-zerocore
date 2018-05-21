@@ -10,7 +10,6 @@
  */
 
 use ZN\Comparison;
-use ZN\DataTypes\Arrays;
 
 class Tester
 {
