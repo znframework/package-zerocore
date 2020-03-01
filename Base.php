@@ -81,12 +81,12 @@ class Base
 
         if( is_file($require = (LAYERS_DIR . $path)) )
         {
-            require $require;
+            self::import($require);
         }
 
         if( is_file($require = (EXTERNAL_LAYERS_DIR . $path)) )
         {
-            require $require;
+            self::import($require);
         }
     }
 
