@@ -25,7 +25,7 @@ class Exceptions extends \Exception implements ExceptionsInterface
      */
     public static $errorCodes = 
     [
-        0       => 'ERROR',
+        1       => 'ERROR',
         2       => 'WARNING',
         4       => 'PARSE',
         8       => 'NOTICE',
