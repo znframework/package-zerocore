@@ -114,7 +114,7 @@ class Exceptions extends \Exception implements ExceptionsInterface
             in_array(self::$errorCodes[$no] ?? NULL, $projectError['exitErrors'] ?? [], true) 
         )
         {
-            exit($table);
+            defined('ZN_REDIRECT_NOEXIT') || exit($table);
         }
 
         echo $table;
@@ -194,7 +194,7 @@ class Exceptions extends \Exception implements ExceptionsInterface
             'trace'   => $trace
         ];
 
-        ob_end_clean();
+        ob_end_clean(); 
         
         return Inclusion\View::use('Table', $exceptionData, true, __DIR__ . '/Resources/');
     }
@@ -209,49 +209,6 @@ class Exceptions extends \Exception implements ExceptionsInterface
     protected static function cleanInternalPrefixFromClassName($class)
     {
         return str_ireplace(INTERNAL_ACCESS, '', Datatype::divide($class, '\\', -1));
-    }
-
-    /**
-     * Trace finder
-     * 
-     * @param array $trace
-     * @param int   $p1 = 2
-     * @param int   $p2 = 0
-     * 
-     * @return array
-     */
-    protected static function traceFinder($trace, $p1 = 2, $p2 = 0)
-    {
-        if
-        (
-            isset($trace[$p1]['class']) &&
-            self::cleanInternalPrefixFromClassName($trace[$p1]['class']) === 'StaticAccess' &&
-            $trace[$p1]['function'] === '__callStatic'
-        )
-        {
-            $traceInfo = $trace[$p1];
-
-            $traceInfo['class']    = $trace[$p2]['class']    ?? $trace[$p1]['class'];
-            $traceInfo['function'] = $trace[$p2]['function'] ?? $trace[$p1]['function'];
-        }
-        else
-        {
-            $traceInfo = $trace[$p2] ?? self::traceFinder(debug_backtrace(2), 8, 6);
-        }
-
-        if( ! isset($traceInfo['class']) )
-        {
-            $traceInfo['class'] = $traceInfo['function'];
-        }
-
-        return
-        [
-            'class'    => self::cleanInternalPrefixFromClassName($traceInfo['class']),
-            'function' => $traceInfo['function'],
-            'file'     => $traceInfo['file'],
-            'line'     => $traceInfo['line'],
-            'trace'    => $trace
-        ];
     }
 
     /**
