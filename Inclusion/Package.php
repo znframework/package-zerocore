@@ -61,6 +61,8 @@ class Package
                 return $return;
             }
         }
+
+        return '';
     }
 
     /**
