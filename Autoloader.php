@@ -835,6 +835,3 @@ class Autoloader
         return str_replace(["'", '"'], NULL, $string);
     }
 }
-
-# Alias Autoloader
-class_alias('ZN\Autoloader', 'Autoloader');
