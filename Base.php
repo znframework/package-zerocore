@@ -22,7 +22,7 @@ class Base
     {
         if( IS::phpVersion('8') )
         {
-            return is_object($object);
+            return is_object($object); // @codeCoverageIgnore
         }
         else
         {
@@ -126,9 +126,9 @@ class Base
         {
             define($constant, true);
 
-            if( is_file($file = PROJECT_TYPE === 'SE' ? REAL_BASE_DIR . $file : $file) )
+            if( is_file($file) )
             {
-                return require $file;
+                return require self::prefix($file, REAL_BASE_DIR);
             }
 
             return false;
@@ -343,7 +343,7 @@ class Base
 
         if( $exit === true && ! defined('ZN_REDIRECT_NOEXIT') )
         {
-            exit($str);
+            exit($str); // @codeCoverageIgnore
         }
        
         return $str;
@@ -373,7 +373,7 @@ class Base
 
         if( $exit === true && ! defined('ZN_REDIRECT_NOEXIT') )
         {
-            exit($output);
+            exit($output); // @codeCoverageIgnore
         }
        
         return $output;
