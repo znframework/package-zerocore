@@ -9,6 +9,9 @@
  * @author  Ozan UYKUN [ozan@znframework.com]
  */
 
+/**
+ * @codeCoverageIgnore
+ */
 class Htaccess
 {
     /**
@@ -292,6 +295,11 @@ class Htaccess
         self::ini($htaccess);
 
         $file = '.htaccess';
+
+        if( defined('ZN_SHARED_DIR') )
+        {
+            $file = ZN_SHARED_DIR . $file;
+        }
 
         $getContents = is_file($file) ? trim(file_get_contents($file)) : '';
 
