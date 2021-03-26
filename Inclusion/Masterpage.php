@@ -29,7 +29,7 @@ class Masterpage
      * 
      * @return Masterpage
      */
-    public function headData(Array $headData) : Masterpage
+    public function headData(array $headData) : Masterpage
     {
         Properties::$parameters['headData'] = $headData;
 
@@ -43,7 +43,7 @@ class Masterpage
      * 
      * @return Masterpage
      */
-    public function body(String $body) : Masterpage
+    public function body(string $body) : Masterpage
     {
         self::$settings['bodyPage'] = $body;
 
@@ -71,7 +71,7 @@ class Masterpage
      * 
      * @return Masterpage
      */
-    public function title(String $title) : Masterpage
+    public function title(string $title) : Masterpage
     {
         self::$settings['title'] = $title;
 
@@ -85,7 +85,7 @@ class Masterpage
      * 
      * @return Masterpage
      */
-    public function meta(Array $meta) : Masterpage
+    public function meta(array $meta) : Masterpage
     {
         self::$settings['meta'] = $meta;
 
@@ -99,7 +99,7 @@ class Masterpage
      * 
      * @return Masterpage
      */
-    public function attributes(Array $attributes) : Masterpage
+    public function attributes(array $attributes) : Masterpage
     {
         self::$settings['attributes'] = $attributes;
 
@@ -113,7 +113,7 @@ class Masterpage
      * 
      * @return Masterpage
      */
-    public function content(Array $content) : Masterpage
+    public function content(array $content) : Masterpage
     {
         self::$settings['content'] = $content;
 
@@ -127,7 +127,7 @@ class Masterpage
      * 
      * @return Masterpage
      */
-    public function bodyContent(String $content) : Masterpage
+    public function bodyContent(string $content) : Masterpage
     {
         Properties::$parameters['bodyContent'] = $content;
 
@@ -140,7 +140,7 @@ class Masterpage
      * @param array $randomDataVariable = NULL
      * @param array $head               = NULL
      */
-    public function use(Array $randomDataVariable = NULL, Array $head = NULL)
+    public function use(array $randomDataVariable = NULL, array $head = NULL)
     {
         if( ! empty(Properties::$parameters['headData']) ) $head               = Properties::$parameters['headData'];
         if( ! empty(Properties::$parameters['data'])     ) $randomDataVariable = Properties::$parameters['data'];

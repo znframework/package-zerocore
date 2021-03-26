@@ -76,7 +76,7 @@ class In
      * 
      * @return void
      */
-    public static function invalidRequest(String $authorizationType, Bool $comparisonType)
+    public static function invalidRequest(string $authorizationType, bool $comparisonType)
     {
         # Gets the data from Config/Routing.php file.
         $routingRequestMethods = Config::get('Routing', 'requestMethods');
@@ -106,7 +106,7 @@ class In
      * 
      * @return string
      */
-    public static function secretProjectKey(String $fix = NULL) : String
+    public static function secretProjectKey(string $fix = NULL) : string
     {
         return hash('ripemd320', CONTAINER_PROJECT . $fix);
     }
@@ -118,7 +118,7 @@ class In
      * 
      * @return string
      */
-    public static function defaultProjectKey(String $fix = NULL) : String
+    public static function defaultProjectKey(string $fix = NULL) : string
     {
         return md5(Request::getBaseURL(strtolower(CONTAINER_PROJECT)) . $fix);
     }
@@ -130,7 +130,7 @@ class In
      * 
      * @return string
      */
-    public static function getCurrentProject() : String
+    public static function getCurrentProject() : string
     {
         if( self::isSubdomain() )
         {
@@ -147,7 +147,7 @@ class In
      * 
      * @return string
      */
-    public static function requestURI() : String
+    public static function requestURI() : string
     {
         return (string) self::cleanInjection(self::applyRouteOnURI(rtrim(Request::getActiveURI(), '/')));
     }
@@ -160,7 +160,7 @@ class In
      * 
      * @return string
      */
-    public static function cleanURIPrefix(String $uri = NULL, String $cleanData = NULL) : String
+    public static function cleanURIPrefix(string $uri = NULL, string $cleanData = NULL) : string
     {
         $suffixData = Base::suffix((string) $cleanData);
 
@@ -179,7 +179,7 @@ class In
      * 
      * @return string
      */
-    public static function cleanInjection(String $string = NULL) : String
+    public static function cleanInjection(string $string = NULL) : string
     {
         $urlInjectionChangeChars = Config::get('Security', 'urlChangeChars') ?: [];
 
@@ -264,7 +264,7 @@ class In
      * 
      * @return bool
      */
-    public static function startingController(String $startController = NULL, Array $param = [])
+    public static function startingController(string $startController = NULL, array $param = [])
     {
         $controllerEx = explode(':', $startController);
 
@@ -455,7 +455,7 @@ class In
     /**
      * Protected apply route on uri.
      */
-    protected static function applyRouteOnURI(String $requestUri = NULL) : String
+    protected static function applyRouteOnURI(string $requestUri = NULL) : string
     {
         self::applyRouteAll();
 
