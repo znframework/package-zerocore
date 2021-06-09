@@ -41,7 +41,16 @@ class Theme
         self::$active = Base::suffix($active);
 
         define('CURRENT_THEME', $active);
-        define('CURRENT_THEME_DIR', THEMES_DIR . self::$active);
+        
+        if( ! is_dir($themeDirectory = THEMES_DIR . self::$active) )
+        {
+            if( is_dir($externalThemeDirectory = EXTERNAL_THEMES_DIR . self::$active) )
+            {
+                $themeDirectory = $externalThemeDirectory;
+            }
+        }
+
+        define('CURRENT_THEME_DIR', $themeDirectory);
     }
 
     /**
@@ -86,7 +95,7 @@ class Theme
 
                     if( is_file(THEMES_DIR . $suffix) )
                     {
-                        return self::getReplacePath($path, THEMES_DIR, $suffix, $orig);
+                        return self::getReplacePath($path, THEMES_DIR, $suffix, $orig); // @codeCoverageIgnore
                     }
                     elseif( is_file(EXTERNAL_THEMES_DIR . $suffix) )
                     {
