@@ -44,12 +44,14 @@ class Route extends FilterProperties implements RouteInterface
      * 
      * @var array
      */
-    protected $route = [], $routes = [], $status = [], $setFilters = [], $recursion = [], $recursionFilters = [], $allFilterKeys = [];
+    protected $route = [], $routes = [], $status = [], $setFilters = [], $recursion = [], $recursionFilters = [], $allFilterKeys = [], $lines;
 
     /**
      * Magic Constructor
      * 
      * Get route configuration.
+     * 
+     * @codeCoverageIgnore
      */
     public function __construct()
     {
@@ -58,6 +60,8 @@ class Route extends FilterProperties implements RouteInterface
 
     /**
      * Magic Destructor
+     * 
+     * @codeCoverageIgnore
      */
     public function __destruct()
     {
@@ -123,14 +127,10 @@ class Route extends FilterProperties implements RouteInterface
         {
             if( $recursion[$i] < $current )
             {
-                $this->filters = array_merge($this->recursionFilters[$i], $this->filters); 
+                $this->filters = array_merge($recursionFilters[$i], $this->filters); 
             
                 break;
             }
-        }
-        else
-        {
-            $this->filters = [];
         }
 
         $this->recursion[]        = $current; 
@@ -157,19 +157,14 @@ class Route extends FilterProperties implements RouteInterface
      */
     public function uri(string $path = NULL)
     {
-        $path = rtrim($path, '/');
+        $path = $this->setPath($path, $routeConfig);
 
-        $routeConfig = $this->getConfig;
+        $container = debug_backtrace(2)[2];
 
-        if( ! strstr($path, '/') )
-        {
-            $path = Base::suffix($path) . $routeConfig['openFunction'];
-        }
+        $this->setContainerFilters($container);
 
-        $lowerPath = strtolower($path);
+        $this->setFilters($path);
 
-        $this->setFilters($lowerPath);
-        $this->filters = [];
         $this->changeRouteURI($path, $routeConfig);
     }
 
@@ -220,6 +215,8 @@ class Route extends FilterProperties implements RouteInterface
      * @param string $function
      * @param string $lang
      * @param report
+     * 
+     * @codeCoverageIgnore
      */
     public function redirectShow404(string $function, string $lang = 'callUserFuncArrayError', string $report = 'SystemCallUserFuncArrayError')
     {
@@ -233,6 +230,44 @@ class Route extends FilterProperties implements RouteInterface
         {
             Response::redirect($routeShow404);
         }
+    }
+
+    /**
+     * Protected set container filters
+     */
+    protected function setContainerFilters($container)
+    {
+        $line = $container['line'];
+        $func = $container['function'];
+
+        if( $func === 'container' )
+        {
+            if( isset($this->lines[$line]) )
+            {
+                $this->filters = array_merge($this->lines[$line], $this->filters);
+            }
+            else
+            {
+                $this->lines[$line] = $this->filters;
+            }
+        }
+    }
+
+    /**
+     * Protected set path
+     */
+    protected function setPath($path, &$routeConfig)
+    {
+        $path = rtrim($path, '/');
+
+        $routeConfig = $this->getConfig;
+
+        if( ! strstr($path, '/') )
+        {
+            $path = Base::suffix($path) . $routeConfig['openFunction'];
+        }
+
+        return $path;
     }
 
     /**
@@ -251,10 +286,12 @@ class Route extends FilterProperties implements RouteInterface
         {
             $routeString = Singleton::class('ZN\Regex')->special2classic($this->route);
         }
+        // @codeCoverageIgnoreStart
         elseif( $configPatternType === 'special' )
         {
             $routeString = $this->route;
         }
+        // @codeCoverageIgnoreEnd
 
         # 5.3.21[edited] is empty
         if( trim($routeString, '/') )
@@ -281,15 +318,18 @@ class Route extends FilterProperties implements RouteInterface
                 $column  = $select = $match['column'];
                 $dbClass = Singleton::class('ZN\Database\DB');
 
+                // @codeCoverageIgnoreStart
                 # Json, Serial or Separator
                 if( $decoder !== NULL )
                 {
                     $column .= ' like';
                     $value   = $dbClass->like($value, 'inside');
                 }
+                // @codeCoverageIgnoreEnd
 
                 $return = $dbClass->select($select)->where($column, $value)->get($match['table'])->value();
 
+                // @codeCoverageIgnoreStart
                 # Json, Serial or Separator
                 if( $decoder !== NULL )
                 {
@@ -309,6 +349,7 @@ class Route extends FilterProperties implements RouteInterface
                         Lang::set($newRow);
                     }
                 }
+                // @codeCoverageIgnoreEnd
 
                 return $return;
 
@@ -320,8 +361,10 @@ class Route extends FilterProperties implements RouteInterface
     /**
      * Protected Filter
      */
-    protected function setFilters($lowerPath)
+    protected function setFilters($path)
     {
+        $lowerPath = strtolower($path);
+
         $filterKeys = array_keys($this->filters);
 
         $this->allFilterKeys = array_merge($this->allFilterKeys, $filterKeys);
@@ -330,6 +373,8 @@ class Route extends FilterProperties implements RouteInterface
         {
             $this->setFilters[$type . 's'][$lowerPath][$type] = $this->filters[$type];
         }
+
+        $this->filters = [];
     }
 
     /**
@@ -345,9 +390,9 @@ class Route extends FilterProperties implements RouteInterface
 
         foreach( $matchAll as $key => $val )
         {
-            $key++;
+            $key++; // @codeCoverageIgnore
 
-            $newMatch[] = "$$key";
+            $newMatch[] = "$$key"; // @codeCoverageIgnore
         }
 
         $changeRoute = str_replace($matchAll, $newMatch, $route);
