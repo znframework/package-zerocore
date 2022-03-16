@@ -155,7 +155,7 @@ class Kernel
         self::callController($page, $function, CURRENT_CPARAMETERS);
         
         # The view is automatically loading.
-        self::viewAutoload($wizardPath, $viewPath);  
+        self::viewAutoload($wizardPath, $viewPath);    
         
         # The operation of the system core is completes.
         self::end();
@@ -465,6 +465,6 @@ class Kernel
      */
     protected static function viewLoader($path)
     {
-        return Inclusion\View::use(str_replace(PAGES_DIR, NULL, $path), NULL, true);
+        return Inclusion\View::use(str_replace(PAGES_DIR, '', $path), NULL, true);
     }
 }
