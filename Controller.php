@@ -20,13 +20,13 @@ class Controller
     public function __construct()
     {
         if( defined('static::restore') )
-        {
-            Restoration::mode(static::restore);
+        {      
+            Restoration::mode(static::restore); // @codeCoverageIgnore
         }
 
         if( defined('static::extract') || Config::starting('extractViewData') === true ) foreach( View::$data as $key => $val )
         {
-            $this->$key = $val;
+            $this->$key = $val; // @codeCoverageIgnore
         }
         
         View::getZNClassInstance($this);

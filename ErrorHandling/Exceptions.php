@@ -49,6 +49,8 @@ class Exceptions extends \Exception implements ExceptionsInterface
      * @param void
      * 
      * @return string
+     * 
+     * @codeCoverageIgnore
      */
     public function __toString()
     {
@@ -114,7 +116,7 @@ class Exceptions extends \Exception implements ExceptionsInterface
             in_array(self::$errorCodes[$no] ?? NULL, $projectError['exitErrors'] ?? [], true) 
         )
         {
-            defined('ZN_REDIRECT_NOEXIT') || exit($table);
+            defined('ZN_REDIRECT_NOEXIT') || exit($table); // @codeCoverageIgnore
         }
 
         echo $table;
@@ -180,7 +182,7 @@ class Exceptions extends \Exception implements ExceptionsInterface
 
         if( in_array($no, $projects['escapeErrors'], true) || in_array(self::$errorCodes[$no] ?? NULL, $projects['escapeErrors'], true) )
         {
-            return false;
+            return false; // @codeCoverageIgnore
         }
 
         $wizardErrorData = self::getTemplateWizardErrorData($file, $line);
@@ -225,12 +227,14 @@ class Exceptions extends \Exception implements ExceptionsInterface
         $classInfo = $trace[$p1];
         $fileInfo  = $trace[$p2];
 
+        // @codeCoverageIgnoreStart
         if( ! isset($classInfo['class']) && isset($classInfo['function']) )
         {
             $classInfo['class'] = $classInfo['function'];
             $fileInfo['file']   = $classInfo['file'];
             $fileInfo['line']   = $classInfo['line'];
         }
+        // @codeCoverageIgnoreEnd
 
         return
         [
@@ -248,6 +252,8 @@ class Exceptions extends \Exception implements ExceptionsInterface
      * @param void
      * 
      * @return string|null
+     * 
+     * @codeCoverageIgnore
      */
     protected static function getTemplateWizardErrorData($file, $line)
     {
@@ -270,6 +276,8 @@ class Exceptions extends \Exception implements ExceptionsInterface
 
     /**
      * Protected search error wizard file
+     * 
+     * @codeCoverageIgnore
      */
     protected static function searchErrorWizardFile($args, &$file, &$line)
     {
@@ -296,6 +304,8 @@ class Exceptions extends \Exception implements ExceptionsInterface
 
     /**
      * Protected is wizard or standart file exists
+     * 
+     * @codeCoverageIgnore
      */
     protected static function isWizardOrStandartFileExists(&$file, $trace)
     {
@@ -393,7 +403,7 @@ class Exceptions extends \Exception implements ExceptionsInterface
      */
     protected static function convertPHPTagToWizardTag(&$content)
     {
-        $content = str_replace(['<?php', '?>', '<?='], ['{[', ']}', '{[='], $content);
+        $content = str_replace(['<?php', '?>', '<?='], ['{[', ']}', '{[='], $content ?? '');
     }
 
     /**

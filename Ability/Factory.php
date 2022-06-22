@@ -71,7 +71,7 @@ trait Factory
 
         if( $factory !== NULL )
         {
-            return $factory::class($class)->$method(...$parameters);
+            return $factory::class($class)->$method(...$parameters); // @codeCoverageIgnore
         }
         # It can call the desired method of another class.
         # That is, it opens the way to a mixed class design 
@@ -81,7 +81,7 @@ trait Factory
             # Solving starts when a valid class and method information is sent.
             if( ! self::isValidClassAndMethodName($class, $resolve) )
             {
-                throw new Exception\InvalidFactoryMethod(NULL, $class);
+                throw new Exception\InvalidFactoryMethod(NULL, $class); 
             }
 
             # A new singleton inheritance class instance is created.
@@ -133,6 +133,6 @@ trait Factory
      */
     protected static function isValidClassAndMethodName($class, &$resolve)
     {
-        return preg_match('/(?<class>([a-zA-Z]\w+(\\\\)*){1,})\:\:(?<method>\w+)(?<this>\:this)*/', $class, $resolve);
+        return preg_match('/(?<class>([a-zA-Z]\w+(\\\\)*){1,})\:\:(?<method>\w+)(?<this>\:this)*/', $class ?? '', $resolve);
     }
 }

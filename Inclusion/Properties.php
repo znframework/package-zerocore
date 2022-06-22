@@ -60,6 +60,8 @@ class Properties
      * Recursive 
      * 
      * @param bool $recursive = true
+     * 
+     * @codeCoverageIgnore
      */
     public static function recursive(bool $recursive = true)
     {

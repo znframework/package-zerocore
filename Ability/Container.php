@@ -65,7 +65,7 @@ trait Container
             throw new UnsupportedDriverException(NULL, ['%' => $origin, '#' => __CLASS__]);
         }
 
-        return Singleton::class($class);
+        return Singleton::class($class); // @codeCoverageIgnore
     }
 
     /**

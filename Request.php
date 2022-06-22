@@ -110,7 +110,7 @@ class Request
 
                 if( strlen($isLang) === 2 )
                 {
-                    $currentLang = $isLang;
+                    $currentLang = $isLang; // @codeCoverageIgnore
                 }
 
                 $currentUri = In::cleanURIPrefix($currentUri, $currentLang);
@@ -164,6 +164,6 @@ class Request
      */
     public static function getHostName(string $uri = NULL) : string
     {
-        return SSL_STATUS . Base::host() . '/' . In::cleanInjection(ltrim($uri, '/'));
+        return SSL_STATUS . Base::host() . '/' . In::cleanInjection(ltrim($uri ?? '', '/'));
     }
 }

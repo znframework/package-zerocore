@@ -29,12 +29,12 @@ class Package
     {
         if( ! empty(Properties::$parameters['usable']) )
         {
-            $getContents = Properties::$parameters['usable'];
+            $getContents = Properties::$parameters['usable']; // @codeCoverageIgnore
         }
 
         if( ! empty(Properties::$parameters['recursive']) )
         {
-            $recursive = Properties::$parameters['recursive'];
+            $recursive = Properties::$parameters['recursive']; // @codeCoverageIgnore
         }
 
         Properties::$parameters = [];
@@ -54,7 +54,7 @@ class Package
 
             if( $getContents === false )
             {
-                echo $return;
+                echo $return; // @codeCoverageIgnore
             }
             else
             {
@@ -62,7 +62,7 @@ class Package
             }
         }
 
-        return '';
+        return ''; // @codeCoverageIgnore
     }
 
     /**
@@ -138,7 +138,7 @@ class Package
             }
             else
             {
-                return false;
+                return false; // @codeCoverageIgnore
             }
         }
         elseif( is_file($packages) )

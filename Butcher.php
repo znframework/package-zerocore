@@ -103,7 +103,7 @@ class Butcher
             throw new Exception\FileNotFoundException($this->defaultProjectFile);
         }
 
-        return $this;
+        return $this; // @codeCoverageIgnore
     }
 
     /**
@@ -253,7 +253,7 @@ class Butcher
      */
     protected function getLangValue($key, $string = NULL)
     {
-        return str_replace('%', $string, $this->lang['butcher:' . $key]);
+        return str_replace('%', $string ?? '', $this->lang['butcher:' . $key] ?? '');
     }
 
     /**
@@ -330,7 +330,7 @@ class Butcher
             return $this->getLangValue('extractThemeSuccess');
         }
 
-        return $this->getLangValue('cantExtractTheme');
+        return $this->getLangValue('cantExtractTheme'); // @codeCoverageIgnore
     }
 
     /**
@@ -347,14 +347,16 @@ class Butcher
 
             return true;
         }
+        // @codeCoverageIgnoreStart
         elseif( ! file_exists($target) )
         {
             Filesystem::zipExtract($source, $target);
 
             return true;
         }
+        // @codeCoverageIgnoreEnd
 
-        return false;
+        return false; // @codeCoverageIgnore
     }
 
     /**
@@ -364,10 +366,10 @@ class Butcher
     {
         if( $case === 'normal' )
         {
-            return $directory;
+            return $directory; // @codeCoverageIgnore
         }
 
-        $directory = str_replace([' ', '_'], '-', $directory);
+        $directory = str_replace([' ', '_'], '-', $directory ?? '');
 
         switch( $case )
         {
@@ -376,7 +378,7 @@ class Butcher
             case 'lower': return $this->mbConvertCase($directory, $case);
             default     : 
             {
-                $case = explode(':', $case); $type = $case[1] ?? NULL;
+                $case = explode(':', $case); $type = $case[1] ?? '';
                 $name = $case[0];
                 
                 if( strpos($type, 'inc') === 0 )
@@ -408,7 +410,7 @@ class Butcher
             return $case . $this->inc++;
         }
 
-        return $this->incrementCase($case);
+        return $this->incrementCase($case); // @codeCoverageIgnore
     }
 
     /**
@@ -421,7 +423,7 @@ class Butcher
             return $case . rand($match['min'] ?? 0, $match['max'] ?? 0);
         }
 
-        return $this->incrementCase($case); 
+        return $this->incrementCase($case); // @codeCoverageIgnore
     }
 
     /**
@@ -443,7 +445,7 @@ class Butcher
      */
     protected function mbConvertCase($string, $type)
     {
-        return str_replace(' ', '', mb_convert_case(str_replace('-', ' ', $string), Helper::toConstant($type, 'MB_CASE_')));
+        return str_replace(' ', '', mb_convert_case(str_replace('-', ' ', $string ?? ''), Helper::toConstant($type, 'MB_CASE_')));
     }
 
     /**
@@ -599,7 +601,7 @@ class Butcher
             return true;
         }
         
-        return false;
+        return false; // @codeCoverageIgnore
     }
 
     /**
@@ -624,7 +626,7 @@ class Butcher
      */
     protected function convertSlugSeparator($string)
     {
-        return str_replace([' ', '_', '.'], '-', $string);
+        return str_replace([' ', '_', '.'], '-', $string ?? '');
     }
 
     /**
@@ -640,7 +642,7 @@ class Butcher
      */
     protected function addSlashesToAt($string)
     {
-        return str_replace('@', '/@', $string);
+        return str_replace('@', '/@', $string ?? '');
     }
 
     /**
@@ -659,7 +661,7 @@ class Butcher
         
         if( ! file_exists($return) && $dir !== CONFIG_DIR )
         {
-            Filesystem::createFolder($return);
+            Filesystem::createFolder($return); // @codeCoverageIgnore
         }
 
         return $return;
@@ -685,7 +687,7 @@ class Butcher
             return require $configFile;
         }
 
-        return [];
+        return []; // @codeCoverageIgnore
     }
     
     /**
@@ -697,7 +699,7 @@ class Butcher
         {
             if( $this->application !== NULL )
             {
-                $return = PROJECTS_DIR . $this->application . '/Resources/Themes/';
+                $return = PROJECTS_DIR . $this->application . '/Resources/Themes/'; // @codeCoverageIgnore
             }
             else
             {
@@ -711,7 +713,7 @@ class Butcher
         
         if( ! file_exists($return) )
         {
-            Filesystem::createFolder($return);
+            Filesystem::createFolder($return); // @codeCoverageIgnore
         }
 
         return $return;
@@ -815,7 +817,7 @@ class Butcher
                 );
             }
             
-            return $data;
+            return $data; // @codeCoverageIgnore
 
         }, $body));
     }
@@ -868,8 +870,8 @@ class Butcher
 
         if( ! file_exists($sectionsDirectory) )
         {
-            Filesystem::createFolder($sectionsDirectory);
-            file_put_contents($sectionsDirectory . 'body.wizard.php', '@view');
+            Filesystem::createFolder($sectionsDirectory); // @codeCoverageIgnore
+            file_put_contents($sectionsDirectory . 'body.wizard.php', '@view'); // @codeCoverageIgnore
         }
     }
 
@@ -899,7 +901,7 @@ class Butcher
      */
     protected function convertControllerName($controller)
     {
-        return str_replace(['index'], [$this->routeConfig()['openController']], $controller);
+        return str_replace(['index'], [$this->routeConfig()['openController']], $controller ?? '');
     }
 
     /**

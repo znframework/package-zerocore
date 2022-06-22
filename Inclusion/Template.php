@@ -21,6 +21,8 @@ class Template
      * @param bool   $obGetContents = false
      * 
      * @return mixed
+     * 
+     * @codeCoverageIgnore
      */
     public static function use(string $page, array $data = NULL, bool $obGetContents = false)
     {

@@ -320,7 +320,7 @@ class Filesystem
                     }
 
                     # If the directory is full, continue with directory recursion.
-                    self::getRecursiveFiles($v, $allFiles, $getRecursiveFiles);
+                    self::getRecursiveFiles($v, $allFiles, $getRecursiveFiles); // @codeCoverageIgnore
                 }
             }
 
@@ -349,7 +349,7 @@ class Filesystem
 
         if( empty($path) )
         {
-            $path = '.';
+            $path = '.'; // @codeCoverageIgnore
         }
 
         if( $pathType === true )

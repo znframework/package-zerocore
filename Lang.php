@@ -20,7 +20,7 @@ class Lang
      * 
      * @var mixed
      */
-    protected static $lang = NULL;
+    protected static $lang = [];
 
     /**
      * Keeps default configuration
@@ -99,6 +99,8 @@ class Lang
      */
     public static function select(string $file = NULL, string $str = NULL, $changed = NULL)
     {
+        $langstr = '';
+
         if( ! isset(self::$lang[$file]) )
         {      
             $file          = ($getLang = self::get()).'/'.Base::suffix($file, '.php');
@@ -107,11 +109,11 @@ class Lang
 
             if( is_file($langDir) && ! IS::import($langDir) )
             {
-                self::$lang[$file] = require $langDir;
+                self::$lang[$file] = require $langDir; // @codeCoverageIgnore
             }
             elseif( is_file($commonLangDir) && ! IS::import($commonLangDir) )
             {
-                self::$lang[$file] = require $commonLangDir;
+                self::$lang[$file] = require $commonLangDir; // @codeCoverageIgnore
             }
             elseif( ! empty(self::$default) && empty(self::$lang[$file]) )
             {
@@ -199,6 +201,7 @@ class Lang
         }
         else
         {
+            // @codeCoverageIgnoreStart
             if( $_SESSION[$defaultSystemLanguageData] !== $default )
             {
                 $_SESSION[$defaultSystemLanguageData] = $default;
@@ -206,6 +209,7 @@ class Lang
 
                 return $default;
             }
+            // @codeCoverageIgnoreEnd
         }
 
         if( empty($_SESSION[$systemLanguageData]) )

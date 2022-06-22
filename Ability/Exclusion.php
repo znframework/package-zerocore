@@ -69,6 +69,8 @@ trait Exclusion
      * @param void
      * 
      * @return void
+     * 
+     * @codeCoverageIgnore
      */
     public function continue()
     {

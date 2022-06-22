@@ -62,7 +62,7 @@ class Robots
 
         if( defined('ZN_SHARED_DIR') )
         {
-            $file = ZN_SHARED_DIR . $file;
+            $file = ZN_SHARED_DIR . $file; // @codeCoverageIgnore
         }
 
         return $file;
@@ -97,14 +97,14 @@ class Robots
         switch( $key )
         {
             case 'userAgent':
-                $robots .= ! empty( $val ) ? 'User-agent: '.$val.EOL : '';
+                $robots .= ! empty( $val ) ? 'User-agent: ' . $val . EOL : '';
             break;
 
             case 'allow'    :
             case 'disallow' :
                 if( ! empty($val) ) foreach( $val as $v )
                 {
-                    $robots .= ucfirst($key).': '.$v.EOL;
+                    $robots .= ucfirst($key) . ': ' . $v . EOL;
                 }
             break;
         }
