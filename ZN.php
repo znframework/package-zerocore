@@ -507,7 +507,7 @@ class ZN
         $restoreFix = 'Restore';
 
         # Does the project name have a 'restore' prefix?
-        $isRestorePrefix = strpos(REQUESTED_CURRENT_PROJECT, $restoreFix) === 0;
+        $isRestorePrefix = strpos((string) REQUESTED_CURRENT_PROJECT, $restoreFix) === 0;
 
         # If the requested project is a sub-project, the project containing this project is called.
         if( ( ! empty($containers) || $isRestorePrefix ) && REQUESTED_CURRENT_PROJECT !== NULL )
