@@ -133,6 +133,12 @@ class ZN
         # Provides data about the current working url.
         Structure::defines();
 
+        # Configures the use of Composer autoloader.
+        if( $composer = Config::get('Autoloader', 'composer') ) 
+        {
+            Composer::loader($composer);
+        }
+
         # If the operation is executed via console, the code flow is not continue.  
         if( defined('CONSOLE_ENABLED') || $type === NULL )
         {
